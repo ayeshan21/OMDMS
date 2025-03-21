@@ -38,6 +38,11 @@ main{
      width: 50px;
      height: 50px;
 }
+.form-group .fa-solid{
+    position:absolute;
+    padding:10px;
+    margin-left:10px;
+}
 /*Registration Style*/
 .register-form {
     width: 50%;
