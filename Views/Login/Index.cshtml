@@ -2,7 +2,7 @@
 	ViewData["Title"] = "Login";
 	Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<form>
+<form class="login-form">
    <div class="p-4 bg-light border border-dark rounded-3 shadow-lg">
 	    <div class="login-icon">
 			<img src="~/images/login-img.png" alt="image not found" />
@@ -31,7 +31,7 @@
 		</div>
 		<button type="button" class="form-control bg-success rounded-pill mb-4">Login</button>
 		<div class="text-center">
-			New User? <a asp-controller="Registration" asp-action="Index">Register</a>
+			New User? <a asp-controller="NGORegistration" asp-action="Index">NGO</a> or <a asp-controller="UserRegistration" asp-action="Index">Donor</a><a></a>
 		</div>
    </div>
 </form>
