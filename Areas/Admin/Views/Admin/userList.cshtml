@@ -1,0 +1,44 @@
+﻿@model List<Microsoft.AspNetCore.Identity.IdentityUser>
+
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "User List";
+}
+
+<h2>Users Without Profiles</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>User Name</th>
+            <th>Email</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            int count = 1;
+            foreach (var user in Model)
+            {
+                <tr>
+                    <td>@count</td>
+                    <td>@user.Id</td>
+                    <td>@user.Email</td>
+                   @*  <td>
+                        <a asp-action="Edit" asp-route-id="@user.Id" class="btn btn-sm btn-primary">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@user.Id" class="btn btn-sm btn-danger">Delete</a>
+                    </td> *@
+                </tr>
+                count++;
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="3">No users found without profiles.</td>
+            </tr>
+        }
+    </tbody>
+</table>

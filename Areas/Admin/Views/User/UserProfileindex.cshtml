@@ -1,0 +1,113 @@
+﻿@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "User Profile";
+}
+
+<form id="userProfileForm" method="post" enctype="multipart/form-data">
+    <div class="p-4 bg-light">
+        <div class="form-group">
+            <label asp-for="FullName" class="control-label">Full Name *</label>
+            <input asp-for="FullName" class="form-control" id="fullname" />
+            <span asp-validation-for="FullName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Email" class="control-label">Email *</label>
+            <input asp-for="Email" class="form-control" type="email" id="email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PhoneNumber" class="control-label">Phone Number *</label>
+            <input asp-for="PhoneNumber" class="form-control" type="tel" id="phone" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Address" class="control-label">Address *</label>
+            <textarea asp-for="Address" class="form-control" id="address"></textarea>
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="NgoCode" class="control-label">NGO Code (if applicable)</label>
+            <input asp-for="NgoCode" class="form-control" type="text" id="ngocode" />
+            <span asp-validation-for="NgoCode" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Role" class="control-label">I am interested to be: *</label>
+            <select asp-for="Role" class="form-control" id="role">
+                <option value="Donor">Donor</option>
+                <option value="NGO">NGO</option>
+            </select>
+            <span asp-validation-for="Role" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ProfilePictureUrl" class="control-label">Profile Picture *</label>
+            <input type="file" asp-for="ProfilePictureFile" class="form-control-file" id="picture" />
+            <span asp-validation-for="ProfilePictureUrl" class="text-danger"></span>
+        </div>
+        <div class="form-group d-flex justify-content-between">
+            <input type="submit" value="Save Profile" class="btn btn-success" id="save_profile" />
+            <input type="submit" value="Edit Profile" class="btn btn-danger" id="edit_profile" />
+        </div>
+    </div>
+</form>
+
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(document).ready(function () {
+            $("#save_profile").click(function (event) {
+                event.preventDefault();
+
+                var formdata = new FormData();
+                formdata.append("FullName", $("#fullname").val());
+                formdata.append("Email", $("#email").val());
+                formdata.append("PhoneNumber", $("#phone").val());
+                formdata.append("Address", $("#address").val());
+                formdata.append("NgoCode", $("#ngocode").val());
+                formdata.append("Role", $("#role").val());
+
+                var fileInput = $("#picture")[0];
+                if (fileInput.files.length > 0) {
+                    formdata.append("ProfilePictureFile", fileInput.files[0]); // Match the model property name
+                }
+
+                // Debug: log FormData contents
+                for (var pair of formdata.entries()) {
+                    console.log(pair[0] + ': ' + (pair[0] === 'ProfilePictureFile' ? pair[1].name : pair[1]));
+                }
+
+                $.ajax({
+                    url: "CreateUser",
+                    type: "POST",
+                    data: formdata,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        Swal.fire({
+                            title: "Saved!",
+                            icon: "success"
+                        });
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error details:", xhr.responseText);
+                        Swal.fire({
+                            title: "Error",
+                            text: xhr.responseText || "Something went wrong!",
+                            icon: "error"
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+}

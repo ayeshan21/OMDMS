@@ -1,0 +1,174 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Home Page";
+}
+<style>
+    nav.navbar {
+        width: 100%;
+        z-index: 10;
+    }
+
+    .bg-img {
+        height: 70vh;
+        width: 100%;
+        object-fit: cover;
+        filter: brightness(0.7);
+        display: block;
+    }
+
+    .overlay-text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        font-size: 3rem;
+        text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.7);
+        text-align: center;
+        width: 100%;
+    }
+
+    .services-section {
+        padding: 80px 0;
+        background-color: #f8f9fa;
+    }
+
+    .service-card {
+        padding: 30px 20px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+        height: 100%;
+    }
+
+    .service-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+
+    .service-icon {
+        font-size: 3rem;
+        margin-bottom: 20px;
+        color: #0d6efd;
+    }
+</style>
+
+<div class="position-relative">
+    <img src="~/images/donate.jpg" alt="Medicine Donation" class="bg-img" />
+    <div class="overlay-text">
+        <h1>ASP Online Medicine Donation</h1>
+        <p class="fs-4">Connecting donors with those in need</p>
+    </div>
+</div>
+
+<div class="services-section">
+    <div class="container">
+        <h2 class="text-center fw-bold mb-5">Our Services</h2>
+        <div class="row g-4">
+            <!-- Service 1 -->
+            <div class="col-md-4">
+                <div class="service-card bg-white text-center">
+                    <div class="service-icon">
+                        <i class="fas fa-pills"></i>
+                    </div>
+                    <h3>Medicine Collection</h3>
+                    <p>We collect unused but valid medicines from donors and distribute them to people who can't afford them.</p>
+                </div>
+            </div>
+
+            <!-- Service 2 -->
+            <div class="col-md-4">
+                <div class="service-card bg-white text-center">
+                    <div class="service-icon">
+                        <i class="fas fa-hand-holding-medical"></i>
+                    </div>
+                    <h3>Donation Platform</h3>
+                    <p>Our online platform makes it easy to donate medicines with just a few clicks. Schedule a pickup or drop-off.</p>
+                </div>
+            </div>
+
+            <!-- Service 3 -->
+            <div class="col-md-4">
+                <div class="service-card bg-white text-center">
+                    <div class="service-icon">
+                        <i class="fas fa-heartbeat"></i>
+                    </div>
+                    <h3>Quality Verification</h3>
+                    <p>All donated medicines undergo strict quality checks before distribution to ensure safety and efficacy.</p>
+                </div>
+            </div>
+
+            <!-- Service 4 -->
+            <div class="col-md-4">
+                <div class="service-card bg-white text-center">
+                    <div class="service-icon">
+                        <i class="fas fa-truck"></i>
+                    </div>
+                    <h3>Distribution Network</h3>
+                    <p>We have an extensive network to deliver medicines to NGOs, hospitals, and individuals in need.</p>
+                </div>
+            </div>
+
+            <!-- Service 5 -->
+            <div class="col-md-4">
+                <div class="service-card bg-white text-center">
+                    <div class="service-icon">
+                        <i class="fas fa-calendar-check"></i>
+                    </div>
+                    <h3>Expiry Management</h3>
+                    <p>We carefully monitor medicine expiry dates and ensure proper disposal of expired medications.</p>
+                </div>
+            </div>
+
+            <!-- Service 6 -->
+            <div class="col-md-4">
+                <div class="service-card bg-white text-center">
+                    <div class="service-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Community Support</h3>
+                    <p>We organize health camps and awareness programs to promote responsible medicine usage.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- How It Works Section -->
+<div class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">How It Works</h2>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h4><i class="fas fa-user-plus me-2"></i>For Donors</h4>
+                        <ol class="mt-3">
+                            <li class="mb-2">Register on our platform</li>
+                            <li class="mb-2">List the medicines you want to donate</li>
+                            <li class="mb-2">Schedule a pickup or drop-off</li>
+                            <li class="mb-2">Receive donation acknowledgment</li>
+                        </ol>
+                        <a href="#" class="btn btn-primary mt-3">Donate Now</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h4><i class="fas fa-hands-helping me-2"></i>For Recipients</h4>
+                        <ol class="mt-3">
+                            <li class="mb-2">Register with required documents</li>
+                            <li class="mb-2">Browse available medicines</li>
+                            <li class="mb-2">Request needed medications</li>
+                            <li class="mb-2">Receive delivery or pick up</li>
+                        </ol>
+                        <a href="#" class="btn btn-success mt-3">Request Medicines</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Font Awesome for icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
