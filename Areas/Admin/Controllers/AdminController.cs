@@ -5,16 +5,18 @@ using Online_Medicine_Donation.Data;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
 using System.Collections.Generic;
+using Online_Medicine_Donation.Controllers;
 
 namespace Online_Medicine_Donation.Areas.Admin.Controllers
 {
     [Area("Admin"), Route("Admin")]
     //[Authorize(Roles = "Admin")]
-    public class AdminController : Controller
+    public class AdminController : BaseController
+
     {
         private readonly OnlineMedicineContext _context;
         private readonly UserManager<IdentityUser> _userManager;
-        public AdminController(OnlineMedicineContext context, UserManager<IdentityUser> userManager)
+        public AdminController(OnlineMedicineContext context, UserManager<IdentityUser> userManager) : base(context, userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -22,14 +24,8 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
         [Route("Dashboard")]
         public IActionResult Dashboard()
         {
-            //var userId = UserManager.GetUserId(User);
-            var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
 
-            var profile = _context.UserProfiles.Where(x=>x.UserProfileId.ToString() == userId).FirstOrDefault();
-
-            ViewBag.ProfilePictureUrl = profile?.ProfilePictureUrl;
-
-            return View(profile);
+            return View();
         }
 
         [Route("NgoList")]
@@ -43,26 +39,20 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
         public IActionResult DonorList()
         {
             var DonorProfiles = _context.UserProfiles.Where(x => x.Role == "Donor").ToList();
-        
-            return View(DonorProfiles); 
+
+            return View(DonorProfiles);
         }
         [Route("UserList")]
         public IActionResult UserList()
         {
-            var profileUserIds = _context.UserProfiles
-                .Select(x => x.UserId)
-                .ToHashSet();
+            var profileUserIds = _context.UserProfiles.Select(x => x.UserId).ToHashSet();
 
-            var allUsers = _context.Users
-                .ToList();
+            var allUsers = _context.Users.ToList();
 
-            var datalist = allUsers
-                .Where(user =>
-                    Guid.TryParse(user.Id, out var parsedId) &&
-                    !profileUserIds.Contains(parsedId))
-                .ToList();
+            var datalist = allUsers.Where(user =>Guid.TryParse(user.Id, out Guid parsedId) && !profileUserIds.Contains(parsedId)) .ToList();
 
             return View(datalist);
         }
+
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Online_Medicine_Donation.Controllers;
 using Online_Medicine_Donation.Data;
 using Online_Medicine_Donation.DataModel.Online_Medicine_Donation.Models;
 using Online_Medicine_Donation.ViewModel;
@@ -15,7 +16,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 {
     [Area("Admin"), Route("Users")]
 
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private Guid currUserGuid => Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userGuid) ? userGuid : Guid.Empty;
         private readonly OnlineMedicineContext _context;
@@ -23,7 +24,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
         private readonly UserManager<IdentityUser> _userManager;
 
-        public UserController(OnlineMedicineContext context, IWebHostEnvironment env, UserManager<IdentityUser> userManager)
+        public UserController(OnlineMedicineContext context, IWebHostEnvironment env, UserManager<IdentityUser> userManager) : base(context, userManager)
         {
             _context = context;
             _env = env;
