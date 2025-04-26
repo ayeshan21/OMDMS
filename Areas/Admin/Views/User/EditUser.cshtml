@@ -1,0 +1,61 @@
+﻿@model Online_Medicine_Donation.ViewModel.UserProfileVM
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Edit User Profile";
+}
+
+<form asp-action="EditUser" asp-controller="User" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="UserId" />
+    <div class="p-4 bg-light">
+        <div class="form-group">
+            <label asp-for="FullName" class="control-label">Full Name *</label>
+            <input asp-for="FullName" class="form-control" />
+            <span asp-validation-for="FullName" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Email" class="control-label">Email *</label>
+            <input asp-for="Email" class="form-control" type="email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="PhoneNumber" class="control-label">Phone Number *</label>
+            <input asp-for="PhoneNumber" class="form-control" type="tel" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Address" class="control-label">Address *</label>
+            <textarea asp-for="Address" class="form-control"></textarea>
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="NgoCode" class="control-label">NGO Code (if applicable)</label>
+            <input asp-for="NgoCode" class="form-control" type="text" />
+            <span asp-validation-for="NgoCode" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Role" class="control-label">I am interested to be: *</label>
+            <select asp-for="Role" class="form-control">
+                <option value="">-- Select Role --</option>
+                <option value="Donor">Donor</option>
+                <option value="NGO">NGO</option>
+            </select>
+            <span asp-validation-for="Role" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ProfilePictureFile" class="control-label">Profile Picture *</label>
+            <input asp-for="ProfilePictureFile" type="file" class="form-control-file" />
+            <span asp-validation-for="ProfilePictureFile" class="text-danger"></span>
+        </div>
+
+        <div class="form-group d-flex justify-content-between">
+            <input type="submit" value="Save Profile" class="btn btn-success" />
+            <a asp-controller="User" asp-action="UserProfile" class="btn btn-secondary">Cancel</a>
+        </div>
+    </div>
+</form>

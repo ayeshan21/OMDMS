@@ -148,7 +148,7 @@
                             <li class="mb-2">Schedule a pickup or drop-off</li>
                             <li class="mb-2">Receive donation acknowledgment</li>
                         </ol>
-                        <a href="#" class="btn btn-primary mt-3">Donate Now</a>
+                        <a href="#" class="btn btn-success mt-3" onclick="showProfileAlert()">Donate Now</a>
                     </div>
                 </div>
             </div>
@@ -162,7 +162,7 @@
                             <li class="mb-2">Request needed medications</li>
                             <li class="mb-2">Receive delivery or pick up</li>
                         </ol>
-                        <a href="#" class="btn btn-success mt-3">Request Medicines</a>
+                        <a href="#" class="btn btn-success mt-3" onclick="showProfileAlert()">Request Medicines</a>
                     </div>
                 </div>
             </div>
@@ -172,3 +172,19 @@
 
 <!-- Font Awesome for icons -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+@section Scripts{
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+
+    <script>
+        function showProfileAlert() {
+            Swal.fire({
+                title: "Please create your profile first"
+            });
+        }
+
+    </script>
+
+}

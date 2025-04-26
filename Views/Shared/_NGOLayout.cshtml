@@ -29,7 +29,7 @@
 </head>
 <body>
     <div class="container-scroller">
-      <!-- partial:partials/_navbar.html -->
+        <!-- partial:partials/_navbar.html -->
         <nav class="navbar default-layout-navbar col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
             <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
                 <a class="navbar-brand text-dark
@@ -65,7 +65,7 @@ fs-4 fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
                                     <i class="fa-solid fa-user-tie"></i>
                                 }
                             </div>
-              
+
                             <div class="nav-profile-text">
                                 <p class="font-weight-bold mb-2">
                                     @((UserManager.GetUserName(User)?.Split('@')[0]) is string name && name.Length > 0
@@ -75,7 +75,7 @@ fs-4 fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
                             </div>
 
                         </a>
-                        <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">                          
+                        <div class="dropdown-menu navbar-dropdown" aria-labelledby="profileDropdown">
                             <form class="dropdown-item p-0 m-0" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
                                 <button type="submit" class="btn dropdown-item text-start">
                                     <i class="mdi mdi-logout me-2 text-primary"></i> Signout
@@ -94,7 +94,7 @@ fs-4 fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
                 </button>
             </div>
         </nav>
-  
+
         <!-- partial -->
         <div class="container-fluid page-body-wrapper">
             <!-- partial:partials/_sidebar.html -->
@@ -119,7 +119,7 @@ fs-4 fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
                                         ? char.ToUpper(email[0]) + email.Substring(1)
                                         : "")
                                 </span>
-                     @*            <span class="text-secondary text-small">Project Manager</span> *@
+                                @*            <span class="text-secondary text-small">Project Manager</span> *@
                                 <span class="text-secondary text-small">@User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value</span>
 
                             </div>
@@ -127,39 +127,21 @@ fs-4 fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Admin" asp-action="Dashboard">
-                            <span class="menu-title">Dashboard</span>
-                            <i class="mdi mdi-home menu-icon"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="User" asp-action="UserProfileindex" >
+                        <a class="nav-link" asp-controller="User" asp-action="UserProfileindex">
                             <span class="menu-title">My Profile</span>
                             <i class="fa-solid fa-user menu-icon"></i>
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" asp-controller="Admin" asp-action="UserList">
-                            <span class="menu-title">User List</span>
-                            <i class="fa-solid fa-user menu-icon"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Admin" asp-action="NgoList">
-                            <span class="menu-title">NGO List</span>
-                            <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link"  asp-controller="Admin" asp-action="DonorList">
-                            <span class="menu-title">Donor List</span>
-                            <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+                        <a class="nav-link" asp-controller="Admin" asp-action="DonorList">
+                            <span class="menu-title">Request for Medcine</span>
+                            <i class="fa-solid fa-briefcase"></i>
                         </a>
                     </li>
 
                     <li class="nav-item">
                         <a class="nav-link" data-bs-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
-                            <span class="menu-title">Tables</span>
+                            <span class="menu-title">Medicine List</span>
                             <i class="mdi mdi-table-large menu-icon"></i>
                         </a>
                     </li>
@@ -224,7 +206,7 @@ fs-4 fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
     <!-- Custom js for this page -->
     <script src="~/admin/assets/js/dashboard.js"></script>
     <!-- End custom js for this page -->
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+

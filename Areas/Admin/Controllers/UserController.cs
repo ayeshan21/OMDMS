@@ -33,7 +33,28 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
         [Route("UserProfileindex")]
         public IActionResult UserProfileindex()
         {
-            return View();
+
+            var user = _context.UserProfiles.FirstOrDefault(x => x.UserId == currUserGuid);
+    
+            if(user == null)
+            {
+                return View();
+            }
+            else
+            {
+              
+                return RedirectToAction("UserProfile", user);
+
+            }
+
+        }
+        [Route("UserProfile")]
+
+        public IActionResult UserProfile(UserProfile model)
+        {
+
+            return View(model);
+
         }
 
         [Route("CreateUser")]
@@ -123,6 +144,59 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             }
 
         }
- 
+
+        [HttpGet("EditUser/{id}")]
+        public IActionResult EditUser(Guid id)
+        {
+            var profile = _context.UserProfiles.FirstOrDefault(x => x.UserId == id);
+            if (profile == null)
+            {
+                return NotFound();
+            }
+
+            var model = new UserProfileVM
+            {
+                UserId = profile.UserId, // ✅ this was missing
+                FullName = profile.FullName,
+                Email = profile.Email,
+                PhoneNumber = profile.PhoneNumber,
+                Address = profile.Address,
+                NgoCode = profile.NgoCode,
+                Role = profile.Role,
+                ProfilePictureUrl = profile.ProfilePictureUrl
+            };
+
+            return View(model);
+        }
+
+
+
+        [Route("EditUser")]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditUser(UserProfileVM model)
+        {
+            var profile = _context.UserProfiles.FirstOrDefault(x => x.UserId == model.UserId);
+            if (profile == null)
+            {
+                return NotFound();
+            }
+
+            // Handle profile image upload (as in your original logic)
+            // Update fields
+            profile.FullName = model.FullName;
+            profile.Email = model.Email;
+            profile.PhoneNumber = model.PhoneNumber;
+            profile.Address = model.Address;
+            profile.NgoCode = model.NgoCode;
+            profile.Role = model.Role;
+            profile.ProfilePictureUrl = model.ProfilePictureUrl;
+
+            _context.UserProfiles.Update(profile);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("UserProfile");
+        }
+
     }
 }

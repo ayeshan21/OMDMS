@@ -126,7 +126,7 @@ namespace Online_Medicine_Donation.Areas.Identity.Pages.Account
 
                         if (roles.Contains("DONAR"))
                         {
-                            return LocalRedirect("/Users/DonarDashboard");
+                            return LocalRedirect("/User/DonarDashboard");
                         }
                         else if (roles.Contains("NGO"))
                         {

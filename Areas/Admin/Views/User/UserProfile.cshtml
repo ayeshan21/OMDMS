@@ -1,0 +1,46 @@
+﻿@model Online_Medicine_Donation.DataModel.Online_Medicine_Donation.Models.UserProfile
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "User Profile";
+}
+<h1>My Profile</h1>
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Full Name</dt>
+                <dd class="col-sm-8">@Model.FullName</dd>
+
+                <dt class="col-sm-4">Email</dt>
+                <dd class="col-sm-8">@Model.Email</dd>
+
+                <dt class="col-sm-4">Phone Number</dt>
+                <dd class="col-sm-8">@Model.PhoneNumber</dd>
+
+                <dt class="col-sm-4">Address</dt>
+                <dd class="col-sm-8">@Model.Address</dd>
+
+                <dt class="col-sm-4">NGO Code</dt>
+                <dd class="col-sm-8">@(!string.IsNullOrEmpty(Model.NgoCode) ? Model.NgoCode : "N/A")</dd>
+
+                <dt class="col-sm-4">Role</dt>
+                <dd class="col-sm-8">@Model.Role</dd>
+
+                <dt class="col-sm-4">Profile Picture</dt>
+                <dd class="col-sm-8">
+                    @if (!string.IsNullOrEmpty(Model.ProfilePictureUrl))
+                    {
+                        <img src="@Model.ProfilePictureUrl" alt="Profile Picture" height="50" width="100" class="img-thumbnail" />
+                    }
+                    else
+                    {
+                        <span class="text-muted">No picture uploaded.</span>
+                    }
+                </dd>
+            </dl>
+            <a asp-controller="User" asp-action="EditUser" asp-route-id="@Model.UserId" class="btn btn-danger">Edit Profile</a>
+        </div>
+    </div>
+</div>
