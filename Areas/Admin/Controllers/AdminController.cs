@@ -49,9 +49,15 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
             var allUsers = _context.Users.ToList();
 
-            var datalist = allUsers.Where(user =>Guid.TryParse(user.Id, out Guid parsedId) && !profileUserIds.Contains(parsedId)) .ToList();
+            var datalist = allUsers.Where(user => Guid.TryParse(user.Id, out Guid parsedId) && !profileUserIds.Contains(parsedId)).ToList();
 
             return View(datalist);
+        }
+
+        [Route("Tables")]
+        public IActionResult Tables()
+        {
+            return View();
         }
 
     }

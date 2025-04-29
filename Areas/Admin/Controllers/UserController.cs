@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace Online_Medicine_Donation.Areas.Admin.Controllers
 {
-    [Area("Admin"), Route("Users")]
+    [Area("Admin"), Route("User")]
 
     public class UserController : BaseController
     {
@@ -145,7 +145,8 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
         }
 
-        [HttpGet("EditUser/{id}")]
+        [Route("EditUser")]
+        [HttpGet]
         public IActionResult EditUser(Guid id)
         {
             var profile = _context.UserProfiles.FirstOrDefault(x => x.UserId == id);
@@ -173,7 +174,6 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
         [Route("EditUser")]
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> EditUser(UserProfileVM model)
         {
             var profile = _context.UserProfiles.FirstOrDefault(x => x.UserId == model.UserId);

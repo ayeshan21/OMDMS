@@ -130,7 +130,7 @@ namespace Online_Medicine_Donation.Areas.Identity.Pages.Account
                         }
                         else if (roles.Contains("NGO"))
                         {
-                            return LocalRedirect("/Ngo/NgoDashboard");
+                            return LocalRedirect("/Ngo/NgoProfileIndex");
                         }
                         else if (roles.Contains("Admin"))
                         {

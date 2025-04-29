@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Online_Medicine_Donation.DataModel.Online_Medicine_Donation.Models;
+using Online_Medicine_Donation.DataModel;
 
 namespace Online_Medicine_Donation.Data
 {
@@ -13,6 +14,7 @@ namespace Online_Medicine_Donation.Data
         }
 
         public DbSet<UserProfile>UserProfiles { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
     }
 
 }
