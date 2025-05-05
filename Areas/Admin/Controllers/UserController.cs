@@ -118,7 +118,17 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
                     _context.UserProfiles.Add(data);
                     await _context.SaveChangesAsync();
-
+                    if(model.Role == "NGO")
+                    {
+                        var user = await _userManager.FindByIdAsync(currUserGuid.ToString());
+                        await _userManager.AddToRoleAsync(user, "NGO");
+                    }
+                    else if(model.Role == "Donor")
+                    {
+                        var user = await _userManager.FindByIdAsync(currUserGuid.ToString());
+                        await _userManager.AddToRoleAsync(user, "Donor");
+                    }
+                   
                     return Json(new { success = true });
                 }
                 else

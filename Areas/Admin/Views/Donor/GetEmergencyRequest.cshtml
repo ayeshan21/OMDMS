@@ -1,0 +1,35 @@
+﻿@model Online_Medicine_Donation.ViewModel.CombinedRequestVM
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Get Emergency Request";
+}
+<h1 class="text-center">Emergency Request</h1>
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Medicine Name</th>
+                        <th>Quantity</th>
+                        <th>Type</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.EmergencyRequests)
+                    {
+                        <tr>
+                            <td>@item.emergencyRequest.Name</td>
+                            <td>@item.emergencyRequest.Quantity</td>
+                            <td>@item.emergencyRequest.Type</td>
+                            <td> 
+                                <button asp-action="Donate" asp-route-id="@item.emergencyRequest.EmergencyId" class="btn btn-sm btn-success">Donate Now!</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

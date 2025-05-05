@@ -11,11 +11,10 @@ using System.Security.Claims;
 
 namespace Online_Medicine_Donation.Areas.Admin.Controllers
 {
-    [Area("Admin"),Route("Donor")]
+    [Area("Admin"), Route("Donor")]
     public class DonorController : BaseController
     {
-        private Guid currMedicineGuid => Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userGuid) ? userGuid : Guid.Empty;
-        private readonly OnlineMedicineContext _context;
+       private readonly OnlineMedicineContext _context;
         private readonly IWebHostEnvironment _env;
         private readonly UserManager<IdentityUser> _userManager;
 
@@ -25,15 +24,22 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             _env = env;
             _userManager = userManager;
         }
+
         [Route("DonationRequest")]
         public IActionResult DonationRequest()
         {
-            return View();
+            var viewModel = new RequestVM
+            {
+                donationRequest = new DonationRequest(),
+                NgoList = _context.UserProfiles.Where(u => u.Role == "NGO").ToList()
+            };
+
+            return View(viewModel);
         }
 
         [Route("CreateMedicine")]
         [HttpPost]
-        public async Task<IActionResult> CreateMedicine([FromForm] MedicineVM model)
+        public async Task<IActionResult> CreateMedicine([FromForm] RequestVM model)
         {
             if (model == null)
             {
@@ -44,6 +50,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
             try
             {
+                // Important: Check that we're accessing PhotoFile (from viewmodel), not MedicinePhotoUrl
                 if (model.PhotoFile != null && model.PhotoFile.Length > 0)
                 {
                     var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
@@ -68,32 +75,56 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                         await model.PhotoFile.CopyToAsync(stream);
                     }
 
+                    // Set the path for database storage
                     filePath = "/uploads/" + uniqueFileName;
                 }
 
-                var data = new Medicine()
+                var data = new DonationRequest()
                 {
-                    MedicineId = currMedicineGuid,
-                    Name = model.Name,
-                    Quantity = model.Quantity,
-                    Company = model.Company,
-                    Type = model.Type,
-                    ExpiryDate = model.ExpiryDate,
-                    Condition = model.Condition,
-                    MedicinePhotoUrl = filePath 
+                    DonationId = Guid.NewGuid(),
+                    Name = model.donationRequest.Name,
+                    Quantity = model.donationRequest.Quantity,
+                    Company = model.donationRequest.Company,
+                    Type = model.donationRequest.Type,
+                    ExpiryDate = model.donationRequest.ExpiryDate,
+                    Condition = model.donationRequest.Condition,
+                    SelectNgo = model.donationRequest.SelectNgo,
+                    MedicinePhotoUrl = filePath  // Save the path to database
                 };
 
-                _context.Medicines.Add(data);
+                _context.DonationRequests.Add(data);
                 await _context.SaveChangesAsync();
 
                 return Json(new { success = true });
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = ex.Message });
+                return BadRequest($"Error: {ex.Message}");
             }
         }
 
 
+        [Route("GetEmergencyRequest")]
+        public IActionResult GetEmergencyRequest()
+        {
+
+            var emergencyrequest = _context.EmergencyRequests.Select(m => new RequestVM
+            {
+                emergencyRequest = new EmergencyRequest
+                {
+                    EmergencyId = m.EmergencyId, // Use existing ID
+                    Name = m.Name,
+                    Quantity = m.Quantity,
+                    Type = m.Type
+                }
+            }).ToList();
+            var viewModel = new CombinedRequestVM
+            {
+                EmergencyRequests = emergencyrequest
+            };
+
+            return View(viewModel);
+         
+        }
     }
 }

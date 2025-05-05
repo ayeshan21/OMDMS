@@ -1,26 +1,26 @@
-﻿@model Online_Medicine_Donation.ViewModel.MedicineVM
+﻿@model Online_Medicine_Donation.ViewModel.RequestVM
 
 @{
-    Layout = "~/Views/Shared/_NGOLayout.cshtml";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewData["Title"] = "Emergency Form";
 }
 <form id="medicineForm" method="post" enctype="multipart/form-data">
     <div class="p-4 bg-light">
         <div class="form-group">
             <label asp-for="Name" class="control-label">Medicine Full Name *</label>
-            <input asp-for="Name" class="form-control" id="medName" />
+            <input asp-for="emergencyRequest.Name" class="form-control" id="medName" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="Quantity" class="control-label"> Medicine Quantity *</label>
-            <input asp-for="Quantity" class="form-control" type="number" min="1" id="quantity" />
+            <input asp-for="emergencyRequest.Quantity" class="form-control" type="number" min="1" id="quantity" />
             <span asp-validation-for="Quantity" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="Type" class="control-label">Medicine Type</label>
-            <select asp-for="Type" class="form-control" id="type">
+            <select asp-for="emergencyRequest.Type" class="form-control" id="type">
                 <option value="Tablet">Tablet</option>
                 <option value="Capsule">Capsule</option>
                 <option value="Syrup">Syrup</option>
@@ -31,7 +31,7 @@
         </div>
 
         <div class="form-group d-flex justify-content-between">
-            <input type="submit" value="Send emergency request" class="btn btn-success" id="submitMedicine" />
+            <input type="submit" value="Send emergency request" class="btn btn-success" id="submitMedicine" name="submitmedicine"/>
         </div>
     </div>
 </form>
@@ -48,12 +48,12 @@
                 event.preventDefault();
 
                 var formdata = new FormData();
-                formdata.append("Name", $("#medName").val());
-                formdata.append("Quantity", $("#quantity").val());
-                formdata.append("Type", $("#type").val());
+                formdata.append("emergencyRequest.Name", $("#medName").val());
+                formdata.append("emergencyRequest.Quantity", $("#quantity").val());
+                formdata.append("emergencyRequest.Type", $("#type").val());
           
                 $.ajax({
-                    url: "/Ngo/EmergencyRequest",
+                    url: "/Ngo/CreateMedicine",
                     type: "POST",
                     data: formdata,
                     contentType: false,

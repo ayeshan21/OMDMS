@@ -125,50 +125,87 @@ fs-4 fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
                             <i class="mdi mdi-bookmark-check text-success nav-profile-badge"></i>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Admin" asp-action="Dashboard">
-                            <span class="menu-title">Dashboard</span>
-                            <i class="mdi mdi-home menu-icon"></i>
-                        </a>
-                    </li>
+                    @{
+                        var role = User.FindFirst(System.Security.Claims.ClaimTypes.Role)?.Value;
+                    }
+
+                    @if (role == "Admin")
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Admin" asp-action="Dashboard">
+                                <span class="menu-title">Dashboard</span>
+                                <i class="mdi mdi-home menu-icon"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Admin" asp-action="UserList">
+                                <span class="menu-title">User List</span>
+                                <i class="fa-solid fa-user menu-icon"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Admin" asp-action="NgoList">
+                                <span class="menu-title">NGO List</span>
+                                <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Admin" asp-action="DonorList">
+                                <span class="menu-title">Donor List</span>
+                                <i class="mdi mdi-format-list-bulleted menu-icon"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Admin" asp-action="Tables">
+                                <span class="menu-title">Tables</span>
+                                <i class="mdi mdi-table-large menu-icon"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Admin" asp-action="">
+                                <span class="menu-title">Reports</span>
+                                <i class="mdi mdi-chart-bar menu-icon"></i>
+                            </a>
+                        </li>
+                    }
+                  
                     <li class="nav-item">
                         <a class="nav-link" asp-controller="User" asp-action="UserProfileindex" >
                             <span class="menu-title">My Profile</span>
                             <i class="fa-solid fa-user menu-icon"></i>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Admin" asp-action="UserList">
-                            <span class="menu-title">User List</span>
-                            <i class="fa-solid fa-user menu-icon"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" asp-controller="Admin" asp-action="NgoList">
-                            <span class="menu-title">NGO List</span>
-                            <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link"  asp-controller="Admin" asp-action="DonorList">
-                            <span class="menu-title">Donor List</span>
-                            <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-                        </a>
-                    </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#tables" aria-expanded="false" aria-controls="tables">
-                            <span class="menu-title">Tables</span>
-                            <i class="mdi mdi-table-large menu-icon"></i>
-                        </a>
-                    </li>
+                    @if(role == "NGO"){
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Ngo" asp-action="EmergencyRequest">
+                                <span class="menu-title">Emergency request</span>
+                                <i class="fas fa-hands-helping menu-icon"></i>
+                            </a>
+                        </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" data-bs-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
-                            <span class="menu-title">Reports</span>
-                            <i class="mdi mdi-chart-bar menu-icon"></i>
-                        </a>
-                    </li>
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Ngo" asp-action="">
+                                <span class="menu-title">Medicine Stock</span>
+                                <i class="mdi mdi-table-large menu-icon"></i>
+                            </a>
+                        </li>
+                    }
+                    @if(role == "Donor"){
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Donor" asp-action="DonationRequest">
+                                <span class="menu-title">Donation request</span>
+                                <i class="fas fa-hand-holding-medical menu-icon"></i>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Donor" asp-action="GetEmergencyRequest">
+                                <span class="menu-title">Emergency Request</span>
+                                <i class="fa-solid fa-bell menu-icon"></i>
+                            </a>
+                        </li>
+                    }
                 </ul>
             </nav>
             <!-- partial -->

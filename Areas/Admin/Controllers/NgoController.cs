@@ -14,7 +14,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
     [Area("Admin"), Route("Ngo")]
     public class NgoController : Controller
     {
-        private Guid currMedicineGuid => Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userGuid) ? userGuid : Guid.Empty;
+        private Guid currEmergencyGuid => Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userGuid) ? userGuid : Guid.Empty;
         private readonly OnlineMedicineContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
@@ -31,7 +31,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
         [Route("CreateMedicine")]
         [HttpPost]
-        public async Task<IActionResult> CreateMedicine([FromForm] MedicineVM model)
+        public async Task<IActionResult> CreateMedicine([FromForm] RequestVM model)
         {
             if (model == null)
             {
@@ -39,15 +39,15 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             }
             try
             {
-                var data = new Medicine()
+                var data = new EmergencyRequest()
                 {
-                    MedicineId = currMedicineGuid,
-                    Name = model.Name,
-                    Quantity = model.Quantity,   
-                    Type = model.Type,
+                    EmergencyId = currEmergencyGuid,
+                    Name = model.emergencyRequest.Name,
+                    Quantity = model.emergencyRequest.Quantity,   
+                    Type = model.emergencyRequest.Type,
                 };
 
-                _context.Medicines.Add(data);
+                _context.EmergencyRequests.Add(data);
                 await _context.SaveChangesAsync();
                 return Json(new { success = true });
             }

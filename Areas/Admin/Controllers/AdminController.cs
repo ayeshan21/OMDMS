@@ -6,6 +6,10 @@ using Microsoft.AspNetCore.Authorization;
 using System.Linq;
 using System.Collections.Generic;
 using Online_Medicine_Donation.Controllers;
+using Online_Medicine_Donation.ViewModel;
+using Online_Medicine_Donation.DataModel;
+using System.Net.Mail;
+using System.Net;
 
 namespace Online_Medicine_Donation.Areas.Admin.Controllers
 {
@@ -24,7 +28,13 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
         [Route("Dashboard")]
         public IActionResult Dashboard()
         {
+            var ngoCount = _context.UserProfiles.Where(x => x.Role == "NGO").Count();
+            var donorCount = _context.UserProfiles.Where(x => x.Role == "Donor").Count();
+            var medicineCount = _context.Medicines.Count();
 
+            ViewBag.NgoCount = ngoCount;
+            ViewBag.DonorCount = donorCount;
+            ViewBag.MedicineCount = medicineCount;
             return View();
         }
 
@@ -57,8 +67,39 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
         [Route("Tables")]
         public IActionResult Tables()
         {
-            return View();
-        }
+            var donationrequest = _context.DonationRequests.Select(m => new RequestVM
+            {
+                donationRequest = new DonationRequest
+                {
+                    DonationId = m.DonationId, // Use existing ID
+                    Name = m.Name,
+                    Quantity = m.Quantity,
+                    Company = m.Company,
+                    Type = m.Type,
+                    Condition = m.Condition,
+                    ExpiryDate = m.ExpiryDate,
+                    SelectNgo = m.SelectNgo,
+                }
+            }).ToList();
 
+            var emergencyrequest = _context.EmergencyRequests.Select(m => new RequestVM
+            {
+                emergencyRequest = new EmergencyRequest
+                {
+                    EmergencyId = m.EmergencyId, // Use existing ID
+                    Name = m.Name,
+                    Quantity = m.Quantity,
+                    Type = m.Type
+                }
+            }).ToList();
+
+            var viewModel = new CombinedRequestVM
+            {
+                DonationRequests = donationrequest,
+                EmergencyRequests = emergencyrequest
+            };
+
+            return View(viewModel);
+        }
     }
 }
