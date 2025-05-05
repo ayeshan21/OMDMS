@@ -28,6 +28,7 @@
                 <option value="Syrup">Syrup</option>
                 <option value="Ointment">Ointment</option>
                 <option value="Injection">Injection</option>
+                <option value="Inhaler">Inhaler</option>
             </select>
             <span asp-validation-for="Type" class="text-danger"></span>
         </div>
@@ -62,7 +63,7 @@
             <span asp-validation-for="PhotoFile" class="text-danger"></span>
         </div>
         <div class="form-group d-flex justify-content-between">
-            <input type="submit" value="Send request for donation" class="btn btn-success" id="submitMedicine" name="submitmedicine" asp-controller="Donor" asp-action="DonationRequest" />
+            <input type="submit" value="Send request for donation" class="btn btn-success" id="donateRequest" name="donaterequest" asp-controller="Donor" asp-action="DonationRequest" />
         </div>
     </div>
 </form>
@@ -74,7 +75,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function () {
-            $("#submitMedicine").click(function (event) {
+            $("#donateRequest").click(function (event) {
                 event.preventDefault();
 
                 var formdata = new FormData();
@@ -103,7 +104,7 @@
                     processData: false,
                     success: function (response) {
                         Swal.fire({
-                            title: "Saved!",
+                            title: "Request Sent!",
                             icon: "success"
                         });
                     },
