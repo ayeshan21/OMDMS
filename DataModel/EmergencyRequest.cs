@@ -11,8 +11,13 @@ namespace Online_Medicine_Donation.DataModel
 
         [Required]
         [StringLength(100)]
+        [Display(Name = "NGO Name")]
+        public string? NgoName { get; set; }
+
+        [Required]
+        [StringLength(100)]
         [Display(Name = "Medicine Full Name")]
-        public string? Name { get; set; }
+        public string? MedicineName { get; set; }
 
         [Required]
         [Display(Name = "Medicine Quantity")]
@@ -21,6 +26,6 @@ namespace Online_Medicine_Donation.DataModel
         [StringLength(30)]
         [Display(Name = "Medicine Type")]
         public string? Type { get; set; }
-
+        public string? Status { get; set; }
     }
 }

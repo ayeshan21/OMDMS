@@ -42,7 +42,8 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                 var data = new EmergencyRequest()
                 {
                     EmergencyId = currEmergencyGuid,
-                    Name = model.emergencyRequest.Name,
+                    NgoName = model.emergencyRequest.NgoName,
+                    MedicineName = model.emergencyRequest.MedicineName,
                     Quantity = model.emergencyRequest.Quantity,   
                     Type = model.emergencyRequest.Type,
                 };

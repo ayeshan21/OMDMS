@@ -6,10 +6,16 @@
 }
 <form id="medicineForm" method="post" enctype="multipart/form-data">
     <div class="p-4 bg-light">
+
         <div class="form-group">
-            <label asp-for="Name" class="control-label">Medicine Full Name *</label>
-            <input asp-for="emergencyRequest.Name" class="form-control" id="medName" />
-            <span asp-validation-for="Name" class="text-danger"></span>
+            <label asp-for="NgoName" class="control-label">Ngo Name *</label>
+            <input asp-for="emergencyRequest.NgoName" class="form-control" id="ngoName" />
+            <span asp-validation-for="NgoName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="MedicineName" class="control-label">Medicine Full Name *</label>
+            <input asp-for="emergencyRequest.MedicineName" class="form-control" id="medName" />
+            <span asp-validation-for="MedicineName" class="text-danger"></span>
         </div>
 
         <div class="form-group">
@@ -33,8 +39,6 @@
 
         <div class="form-group d-flex justify-content-between">
             <input type="submit" value="Send emergency request" class="btn btn-success" id="requestMedicine" name="requestmedicine"/>
-            <input type="submit" value="Change request" class="btn btn-danger" id="changeRequest" name="changerequest" />
-
         </div>
     </div>
 </form>
@@ -51,7 +55,8 @@
                 event.preventDefault();
 
                 var formdata = new FormData();
-                formdata.append("emergencyRequest.Name", $("#medName").val());
+                formdata.append("emergencyRequest.NgoName", $("#ngoName").val());
+                formdata.append("emergencyRequest.MedicineName", $("#medName").val());
                 formdata.append("emergencyRequest.Quantity", $("#quantity").val());
                 formdata.append("emergencyRequest.Type", $("#type").val());
           

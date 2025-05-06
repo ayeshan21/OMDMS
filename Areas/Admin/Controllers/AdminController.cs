@@ -13,8 +13,9 @@ using System.Net;
 
 namespace Online_Medicine_Donation.Areas.Admin.Controllers
 {
-    [Area("Admin"), Route("Admin")]
     //[Authorize(Roles = "Admin")]
+    [Area("Admin"), Route("Admin")]
+
     public class AdminController : BaseController
 
     {
@@ -87,9 +88,11 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                 emergencyRequest = new EmergencyRequest
                 {
                     EmergencyId = m.EmergencyId, // Use existing ID
-                    Name = m.Name,
+                    NgoName = m.NgoName,
+                    MedicineName = m.MedicineName,
                     Quantity = m.Quantity,
-                    Type = m.Type
+                    Type = m.Type,
+                    Status = m.Status
                 }
             }).ToList();
 
@@ -101,5 +104,33 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
             return View(viewModel);
         }
+        [HttpPost]
+        [Route("AcceptRequest")]
+        public IActionResult AcceptRequest(Guid EmergencyId)
+        {
+            var request = _context.EmergencyRequests.Where(x=>x.EmergencyId == EmergencyId).FirstOrDefault();
+            if (request != null)
+            {
+                request.Status = "Accepted";
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Tables");
+        }
+
+
+
+        [Route("RejectRequest")]
+        [HttpPost]
+        public IActionResult RejectRequest(int EmergencyId)
+        {
+            var request = _context.EmergencyRequests.Find(EmergencyId);
+            if (request != null)
+            {
+                request.Status = "Rejected";
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Tables");
+        }
+
     }
 }

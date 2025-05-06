@@ -105,7 +105,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
 
         [Route("GetEmergencyRequest")]
-        public IActionResult GetEmergencyRequest()
+     /*   public IActionResult GetEmergencyRequest()
         {
 
             var emergencyrequest = _context.EmergencyRequests.Select(m => new RequestVM
@@ -113,7 +113,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                 emergencyRequest = new EmergencyRequest
                 {
                     EmergencyId = m.EmergencyId, // Use existing ID
-                    Name = m.Name,
+                    MedicineName = m.MedicineName,
                     Quantity = m.Quantity,
                     Type = m.Type
                 }
@@ -125,6 +125,25 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
             return View(viewModel);
          
+        }*/
+
+        public IActionResult GetEmergencyRequest()
+        {
+            var acceptedRequests = _context.EmergencyRequests
+                .Where(e => e.Status == "Accepted")
+                .Select(e => new RequestVM
+                {
+                    emergencyRequest = e
+                })
+                .ToList();
+
+            var viewModel = new CombinedRequestVM
+            {
+                EmergencyRequests = acceptedRequests
+            };
+
+            return View(viewModel);
         }
+
     }
 }

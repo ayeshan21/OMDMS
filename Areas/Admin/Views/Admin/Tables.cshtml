@@ -32,7 +32,7 @@
                             <td>@item.donationRequest.ExpiryDate</td>
                             <td>@item.donationRequest.SelectNgo</td>
                             <td>
-                                <a asp-action="CheckValidity" asp-route-id="@item.donationRequest.DonationId" class="btn btn-sm btn-primary">Check Validity</a>
+                                <a asp-action="CheckValidity" asp-route-id="@item.donationRequest.DonationId" class="btn btn-sm btn-primary">Details</a>
                             </td>
                         </tr>
                     }
@@ -49,6 +49,7 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
+                        <th>NGO Name</th>
                         <th>Medicine Name</th>
                         <th>Quantity</th>
                         <th>Type</th>
@@ -59,16 +60,32 @@
                     @foreach (var item in Model.EmergencyRequests)
                     {
                         <tr>
-                            <td>@item.emergencyRequest.Name</td>
+                            <td>@item.emergencyRequest.NgoName</td>
+                            <td>@item.emergencyRequest.MedicineName</td>
                             <td>@item.emergencyRequest.Quantity</td>
                             <td>@item.emergencyRequest.Type</td>
                             <td>
-                                <form asp-action="AcceptRequest" asp-route-id="@item.emergencyRequest.EmergencyId" method="post" style="display:inline;">
-                                    <button type="submit" class="btn btn-sm btn-success">Accept</button>
-                                </form>
-                                <form asp-action="RejectRequest" asp-route-id="@item.emergencyRequest.EmergencyId" method="post" style="display:inline;">
-                                    <button type="submit" class="btn btn-sm btn-danger">Reject</button>
-                                </form>
+                                @if (item.emergencyRequest.Status == "Accepted")
+                                {
+                                    <span class="btn btn-sm disabled bg-success text-white">Accepted</span>
+
+                                }
+                                else if (item.emergencyRequest.Status == "Rejected")
+                                {
+                                    <span class="btn btn-sm disabled bg-danger text-white">Rejected</span>
+                                }
+                                else
+                                {
+                                    <form action="/Admin/AcceptRequest" method="post" style="display:inline;">
+                                        <input type="hidden" name="EmergencyId" value="@item.emergencyRequest.EmergencyId" />
+                                        <input type="submit" class="btn btn-sm btn-success" value="Accept" />
+                                    </form>
+
+                                    <form action="/Admin/RejectRequest" method="post" style="display:inline;">
+                                        <input type="hidden" name="EmergencyId" value="@item.emergencyRequest.EmergencyId" />
+                                        <input type="submit" class="btn btn-sm btn-danger" value="Reject" />
+                                    </form>
+                                }
                             </td>
                         </tr>
                     }
