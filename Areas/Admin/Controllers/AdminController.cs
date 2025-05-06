@@ -117,8 +117,6 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             return RedirectToAction("Tables");
         }
 
-
-
         [Route("RejectRequest")]
         [HttpPost]
         public IActionResult RejectRequest(int EmergencyId)
@@ -132,5 +130,24 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             return RedirectToAction("Tables");
         }
 
+
+        [Route("MedicineDetails")]
+        [HttpGet]
+        public IActionResult MedicineDetails(Guid DonationId)
+        {
+            var donation = _context.DonationRequests.FirstOrDefault(d => d.DonationId == DonationId);
+
+            if (donation == null)
+            {
+                return NotFound(); 
+            }
+
+            var viewModel = new RequestVM
+            {
+                donationRequest = donation
+            };
+
+            return View(viewModel); 
+        }
     }
 }

@@ -32,7 +32,11 @@
                             <td>@item.donationRequest.ExpiryDate</td>
                             <td>@item.donationRequest.SelectNgo</td>
                             <td>
-                                <a asp-action="CheckValidity" asp-route-id="@item.donationRequest.DonationId" class="btn btn-sm btn-primary">Details</a>
+
+                                <form action="/Admin/MedicineDetails" method="get" style="display:inline;">
+                                    <input type="hidden" name="DonationId" value="@item.donationRequest.DonationId" />
+                                    <input type="submit" class="btn btn-sm btn-primary" value="Details" />
+                                </form>
                             </td>
                         </tr>
                     }

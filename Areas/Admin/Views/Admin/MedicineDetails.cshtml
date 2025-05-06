@@ -1,0 +1,50 @@
+﻿@model Online_Medicine_Donation.ViewModel.RequestVM
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">Medicine Full Name</dt>
+                <dd class="col-sm-8">@Model.donationRequest.Name</dd>
+
+                <dt class="col-sm-4">Medicine Quantity</dt>
+                <dd class="col-sm-8">@Model.donationRequest.Quantity</dd>
+
+                <dt class="col-sm-4">Pharmaceutical Company</dt>
+                <dd class="col-sm-8">@Model.donationRequest.Company</dd>
+
+                <dt class="col-sm-4">Medicine Type</dt>
+                <dd class="col-sm-8">@Model.donationRequest.Type</dd>
+
+                <dt class="col-sm-4">Expiry Date</dt>
+                <dd class="col-sm-8">@Model.donationRequest.ExpiryDate</dd>
+
+                <dt class="col-sm-4">Medicine Condition</dt>
+                <dd class="col-sm-8">@Model.donationRequest.Condition</dd>
+
+                <dt class="col-sm-4">Selected NGO</dt>
+                <dd class="col-sm-8">@Model.donationRequest.SelectNgo</dd>
+
+                <dt class="col-sm-4">Medicine Photo</dt>
+                <dd class="col-sm-8">
+                            @if (!string.IsNullOrEmpty(Model.donationRequest.MedicinePhotoUrl))
+                            {
+                        <img src="@Model.donationRequest.MedicinePhotoUrl" alt="Profile Picture" height="50" width="100" class="img-thumbnail" />
+                            }
+                            else
+                            {
+                        <span class="text-muted">No picture uploaded.</span>
+                            }
+                </dd>
+            </dl>
+            <form action="/Admin/MedicineDetails" method="post" style="display:inline;">
+                <input type="hidden" name="DonationId" value="@Model.donationRequest.DonationId" />
+                <input type="submit" class="btn btn-sm btn-success" value="Check Validity" />
+            </form>
+        </div>
+    </div>
+</div>

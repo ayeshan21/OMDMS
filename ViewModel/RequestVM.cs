@@ -11,6 +11,6 @@ namespace Online_Medicine_Donation.ViewModel
         public List<UserProfile> NgoList { get; set; }
         public IFormFile? PhotoFile { get; set; }
 
-     }
+    }
 
 }
