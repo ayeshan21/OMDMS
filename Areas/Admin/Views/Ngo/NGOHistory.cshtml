@@ -1,0 +1,55 @@
+﻿@model Online_Medicine_Donation.ViewModel.CombinedRequestVM
+
+@{
+
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "NGO History";
+
+}
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>NGO Name</th>
+                        <th>Medicine Name</th>
+                        <th>Quantity</th>
+                        <th>Type</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.EmergencyRequests)
+                    {
+                        <tr>
+                            <td>@item.emergencyRequest.NgoName</td>
+                            <td>@item.emergencyRequest.MedicineName</td>
+                            <td>@item.emergencyRequest.Quantity</td>
+                            <td>@item.emergencyRequest.Type</td>
+                            <td>
+                                @if (item.emergencyRequest.Status == "Accepted")
+                                {
+                                    <span class="btn btn-sm disabled bg-success text-white">Accepted</span>
+
+                                }
+                                else if (item.emergencyRequest.Status == "Rejected")
+                                {
+                                    <span class="btn btn-sm disabled bg-danger text-white">Rejected</span>
+                                }
+                                else
+                                {
+                                    <form action="/Admin/AcceptRequest" method="post" style="display:inline;">
+                                        <input type="hidden" name="EmergencyId" value="@item.emergencyRequest.EmergencyId" />
+                                        <input type="submit" class="btn btn-sm btn-info disabled" value="Pending" />
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -14,7 +14,8 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
     [Area("Admin"), Route("Donor")]
     public class DonorController : BaseController
     {
-       private readonly OnlineMedicineContext _context;
+        private Guid currUserGuid => Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userGuid) ? userGuid : Guid.Empty;
+        private readonly OnlineMedicineContext _context;
         private readonly IWebHostEnvironment _env;
         private readonly UserManager<IdentityUser> _userManager;
 
@@ -81,7 +82,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
                 var data = new DonationRequest()
                 {
-                    DonationId = Guid.NewGuid(),
+                    DonationId = currUserGuid,
                     Name = model.donationRequest.Name,
                     Quantity = model.donationRequest.Quantity,
                     Company = model.donationRequest.Company,
@@ -105,28 +106,6 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
 
         [Route("GetEmergencyRequest")]
-     /*   public IActionResult GetEmergencyRequest()
-        {
-
-            var emergencyrequest = _context.EmergencyRequests.Select(m => new RequestVM
-            {
-                emergencyRequest = new EmergencyRequest
-                {
-                    EmergencyId = m.EmergencyId, // Use existing ID
-                    MedicineName = m.MedicineName,
-                    Quantity = m.Quantity,
-                    Type = m.Type
-                }
-            }).ToList();
-            var viewModel = new CombinedRequestVM
-            {
-                EmergencyRequests = emergencyrequest
-            };
-
-            return View(viewModel);
-         
-        }*/
-
         public IActionResult GetEmergencyRequest()
         {
             var acceptedRequests = _context.EmergencyRequests
@@ -143,6 +122,32 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             };
 
             return View(viewModel);
+        }
+
+        [Route("DonorHistory")]
+        public IActionResult DonorHistory()
+        {
+            var donationrequest = _context.DonationRequests.Select(m => new RequestVM
+            {
+                donationRequest = new DonationRequest
+                {
+                    DonationId = m.DonationId, // Use existing ID
+                    Name = m.Name,
+                    Quantity = m.Quantity,
+                    Company = m.Company,
+                    Type = m.Type,
+                    Condition = m.Condition,
+                    ExpiryDate = m.ExpiryDate,
+                    SelectNgo = m.SelectNgo,
+                }
+            }).ToList();
+            var viewModel = new CombinedRequestVM
+            {
+                DonationRequests = donationrequest,
+            };
+
+            return View(viewModel);
+          
         }
 
     }

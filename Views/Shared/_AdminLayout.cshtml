@@ -27,6 +27,11 @@
         }
     </style>
 </head>
+@{
+    var Donor = "Donor";
+    var NGO = "NGO";
+    var Admin = "Admin";
+}
 <body>
     <div class="container-scroller">
       <!-- partial:partials/_navbar.html -->
@@ -167,6 +172,7 @@ fs-4 fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
                                 <i class="mdi mdi-chart-bar menu-icon"></i>
                             </a>
                         </li>
+
                     }
                   
                     <li class="nav-item">
@@ -190,8 +196,16 @@ fs-4 fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
                                 <i class="mdi mdi-table-large menu-icon"></i>
                             </a>
                         </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="NGO" asp-action="NGOHistory">
+                                <span class="menu-title">My history</span>
+                                <i class="fa-solid fa-bell menu-icon"></i>
+                            </a>
+                        </li>
                     }
-                    @if(role == "Donor"){
+                    @if (role == "Donor")
+                    {
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Donor" asp-action="DonationRequest">
                                 <span class="menu-title">Donation request</span>
@@ -202,6 +216,13 @@ fs-4 fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
                         <li class="nav-item">
                             <a class="nav-link" asp-controller="Donor" asp-action="GetEmergencyRequest">
                                 <span class="menu-title">Emergency Request</span>
+                                <i class="fa-solid fa-bell menu-icon"></i>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Donor" asp-action="DonorHistory">
+                                <span class="menu-title">My history</span>
                                 <i class="fa-solid fa-bell menu-icon"></i>
                             </a>
                         </li>

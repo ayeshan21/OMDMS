@@ -30,6 +30,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             _env = env;
             _userManager = userManager;
         }
+
         [Route("UserProfileindex")]
         public IActionResult UserProfileindex()
         {
@@ -48,14 +49,15 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             }
 
         }
-        [Route("UserProfile")]
+        /* [Route("UserProfile")]
 
-        public IActionResult UserProfile(UserProfile model)
-        {
+         public IActionResult UserProfile(UserProfile model)
+         {
 
-            return View(model);
+             return View(model);
 
-        }
+         }*/
+
 
         [Route("CreateUser")]
         [HttpPost]
@@ -118,17 +120,17 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
                     _context.UserProfiles.Add(data);
                     await _context.SaveChangesAsync();
-                    if(model.Role == "NGO")
+                    if (model.Role == "NGO")
                     {
                         var user = await _userManager.FindByIdAsync(currUserGuid.ToString());
                         await _userManager.AddToRoleAsync(user, "NGO");
                     }
-                    else if(model.Role == "Donor")
+                    else if (model.Role == "Donor")
                     {
                         var user = await _userManager.FindByIdAsync(currUserGuid.ToString());
                         await _userManager.AddToRoleAsync(user, "Donor");
                     }
-                   
+
                     return Json(new { success = true });
                 }
                 else
@@ -152,22 +154,38 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                 // Optionally log the error here
                 return StatusCode(500, "An error occurred while saving the user profile: " + ex.Message);
             }
-
         }
+
+  
+        [Route("UserProfile")]
+        public IActionResult UserProfile(Guid UserId)
+        {
+            var profile = _context.UserProfiles.FirstOrDefault(x => x.UserId == UserId);
+            if (profile == null)
+            {
+                return NotFound();
+            }
+            return View(profile);
+        }
+
 
         [Route("EditUser")]
         [HttpGet]
-        public IActionResult EditUser(Guid id)
+        public IActionResult EditUser(Guid UserId)
         {
-            var profile = _context.UserProfiles.FirstOrDefault(x => x.UserId == id);
+            // Make sure you're getting the profile data correctly
+            var profile = _context.UserProfiles
+                .FirstOrDefault(x => x.UserId == UserId);
+
             if (profile == null)
             {
                 return NotFound();
             }
 
+            // Create the view model and ensure ALL properties are mapped properly
             var model = new UserProfileVM
             {
-                UserId = profile.UserId, // ✅ this was missing
+                UserId = profile.UserId,
                 FullName = profile.FullName,
                 Email = profile.Email,
                 PhoneNumber = profile.PhoneNumber,
@@ -177,35 +195,88 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                 ProfilePictureUrl = profile.ProfilePictureUrl
             };
 
+  
+
             return View(model);
         }
-
-
-
         [Route("EditUser")]
         [HttpPost]
         public async Task<IActionResult> EditUser(UserProfileVM model)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
             var profile = _context.UserProfiles.FirstOrDefault(x => x.UserId == model.UserId);
             if (profile == null)
             {
                 return NotFound();
             }
 
-            // Handle profile image upload (as in your original logic)
-            // Update fields
+            // Handle file upload if a new file was provided
+            if (model.ProfilePictureFile != null && model.ProfilePictureFile.Length > 0)
+            {
+                var allowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
+                var extension = Path.GetExtension(model.ProfilePictureFile.FileName).ToLowerInvariant();
+
+                if (!allowedExtensions.Contains(extension))
+                {
+                    ModelState.AddModelError("ProfilePictureFile", "Only image files (.jpg, .jpeg, .png, .gif, .webp) are allowed.");
+                    return View(model);
+                }
+
+                string uploadsFolder = Path.Combine(_env.WebRootPath, "uploads");
+                if (!Directory.Exists(uploadsFolder))
+                {
+                    Directory.CreateDirectory(uploadsFolder);
+                }
+
+                string uniqueFileName = Guid.NewGuid().ToString("N") + extension;
+                string fullPath = Path.Combine(uploadsFolder, uniqueFileName);
+
+                using (var stream = new FileStream(fullPath, FileMode.Create))
+                {
+                    await model.ProfilePictureFile.CopyToAsync(stream);
+                }
+
+                model.ProfilePictureUrl = "/uploads/" + uniqueFileName;
+            }
+
+            // Update profile
             profile.FullName = model.FullName;
             profile.Email = model.Email;
             profile.PhoneNumber = model.PhoneNumber;
             profile.Address = model.Address;
             profile.NgoCode = model.NgoCode;
             profile.Role = model.Role;
-            profile.ProfilePictureUrl = model.ProfilePictureUrl;
+
+            // Only update picture if a new one was uploaded
+            if (!string.IsNullOrEmpty(model.ProfilePictureUrl))
+            {
+                profile.ProfilePictureUrl = model.ProfilePictureUrl;
+            }
 
             _context.UserProfiles.Update(profile);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("UserProfile");
+            // Update user role if changed
+            var user = await _userManager.FindByIdAsync(model.UserId.ToString());
+            var currentRoles = await _userManager.GetRolesAsync(user);
+
+            // Remove all existing roles
+            foreach (var role in currentRoles)
+            {
+                await _userManager.RemoveFromRoleAsync(user, role);
+            }
+
+            // Add new role
+            if (!string.IsNullOrEmpty(model.Role))
+            {
+                await _userManager.AddToRoleAsync(user, model.Role);
+            }
+
+            return RedirectToAction("UserProfile", new { userId = model.UserId });
         }
 
     }

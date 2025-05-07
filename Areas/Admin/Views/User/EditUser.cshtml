@@ -1,4 +1,4 @@
-﻿@model Online_Medicine_Donation.ViewModel.UserProfileVM
+﻿@* @model Online_Medicine_Donation.ViewModel.UserProfileVM
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewData["Title"] = "Edit User Profile";
@@ -48,14 +48,97 @@
         </div>
 
         <div class="form-group">
-            <label asp-for="ProfilePictureFile" class="control-label">Profile Picture *</label>
+            <label asp-for="ProfilePictureFile" class="control-label">Profile Picture</label>
             <input asp-for="ProfilePictureFile" type="file" class="form-control-file" />
             <span asp-validation-for="ProfilePictureFile" class="text-danger"></span>
+            @if (!string.IsNullOrEmpty(Model.ProfilePictureUrl))
+            {
+                <div class="mt-2">
+                    <img src="@Model.ProfilePictureUrl" alt="Current Profile Picture" style="max-height: 100px;" />
+                    <input type="hidden" asp-for="ProfilePictureUrl" />
+                </div>
+            }
         </div>
 
         <div class="form-group d-flex justify-content-between">
-            <input type="submit" value="Save Profile" class="btn btn-success" />
-            <a asp-controller="User" asp-action="UserProfile" class="btn btn-secondary">Cancel</a>
+            <button type="submit" class="btn btn-success">Save Profile</button>
+            <a asp-action="UserProfile" asp-route-userId="@Model.UserId" class="btn btn-secondary">Cancel</a>
         </div>
+    </div>
+</form> *@
+
+
+
+
+
+@model Online_Medicine_Donation.ViewModel.UserProfileVM
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Edit User Profile";
+
+}
+<form asp-action="EditUser" asp-controller="User" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="UserId" id="userId"/>
+    <div class="p-4 bg-light">
+        <div class="form-group">
+            <label asp-for="FullName" class="control-label">Full Name *</label>
+            <input asp-for="FullName" value="@Model.FullName" class="form-control" name="FullName" id="fullname"/>
+            <span asp-validation-for="FullName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Email" class="control-label">Email *</label>
+            <input asp-for="Email" value="@Model.Email" class="form-control" type="email" name="Email" id="email"/>
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PhoneNumber" class="control-label">Phone Number *</label>
+            <input asp-for="PhoneNumber" value="@Model.PhoneNumber" class="form-control" type="tel" name="PhoneNumber" id="phone" />
+            <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Address" class="control-label">Address *</label>
+            <input asp-for="Address" value="@Model.Address" class="form-control" name="Address" id="address"></input>
+            <span asp-validation-for="Address" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="NgoCode" class="control-label">NGO Code (if applicable)</label>
+            <input asp-for="NgoCode" value="@Model.NgoCode" class="form-control" type="text" name="NgoCode" id="ngocode" />
+            <span asp-validation-for="NgoCode" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Role" class="control-label">I am interested to be: *</label>
+            <select asp-for="Role" class="form-control" name="Role" id="role">
+                <option value="@Model.Role">@Model.Role</option>
+               @if (Model.Role == "Donor")
+                {
+                    <option value="NGO">NGO</option>
+                }
+                else
+                {
+                    <option value="Donor">Donor</option>
+                }
+           </select>
+            <span asp-validation-for="Role" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ProfilePictureFile" class="control-label">Profile Picture</label>
+            <input asp-for="ProfilePictureFile" value="@Model.ProfilePictureFile" type="file" class="form-control-file" name="ProfilePictureFile" id="profilepicture"/>
+            <span asp-validation-for="ProfilePictureFile" class="text-danger"></span>
+            @if (!string.IsNullOrEmpty(Model.ProfilePictureUrl))
+            {
+                <div class="mt-2">
+                    <input type="hidden" asp-for="ProfilePictureUrl" value="@Model.ProfilePictureFile" name="ProfilePictureFile" id="profilepicture" />
+                </div>
+            }
+        </div>
+        <div class="form-group d-flex justify-content-between">
+            <button type="submit" class="btn btn-success">Save Profile</button>
+
+            <a href="/Admin/User/UserProfile?UserId=@Model.UserId" class="btn btn-secondary">Cancel</a>
+
+@*            
+
+    <a asp-controller="User" asp-action="UserProfile" asp-area="Admin" asp-route-userId="@Model.UserId" class="btn btn-secondary">Cancel</a>
+ *@        </div>
     </div>
 </form>

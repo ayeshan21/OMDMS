@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Online_Medicine_Donation.Controllers;
 using Online_Medicine_Donation.Data;
 using Online_Medicine_Donation.DataModel;
 using Online_Medicine_Donation.DataModel.Online_Medicine_Donation.Models;
@@ -12,13 +13,13 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 {
 
     [Area("Admin"), Route("Ngo")]
-    public class NgoController : Controller
+    public class NgoController : BaseController
     {
-        private Guid currEmergencyGuid => Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userGuid) ? userGuid : Guid.Empty;
+        private Guid currUserGuid => Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userGuid) ? userGuid : Guid.Empty;
         private readonly OnlineMedicineContext _context;
         private readonly UserManager<IdentityUser> _userManager;
 
-        public NgoController(OnlineMedicineContext context, UserManager<IdentityUser> userManager)
+        public NgoController(OnlineMedicineContext context, UserManager<IdentityUser> userManager): base(context, userManager)
         {
             _context = context;
             _userManager = userManager;
@@ -41,7 +42,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             {
                 var data = new EmergencyRequest()
                 {
-                    EmergencyId = currEmergencyGuid,
+                    EmergencyId = currUserGuid,
                     NgoName = model.emergencyRequest.NgoName,
                     MedicineName = model.emergencyRequest.MedicineName,
                     Quantity = model.emergencyRequest.Quantity,   
@@ -56,6 +57,31 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             {
                 return Json(new { success = false, message = ex.Message });
             }
+        }
+
+
+        [Route("NGOHistory")]
+        public IActionResult NGOHistory()
+        {
+            var emergencyrequest = _context.EmergencyRequests.Select(m => new RequestVM
+            {
+                emergencyRequest = new EmergencyRequest
+                {
+                    EmergencyId = m.EmergencyId, // Use existing ID
+                    NgoName = m.NgoName,
+                    MedicineName = m.MedicineName,
+                    Quantity = m.Quantity,
+                    Type = m.Type,
+                    Status = m.Status
+                }
+            }).ToList();
+            var viewModel = new CombinedRequestVM
+            {
+                EmergencyRequests = emergencyrequest,
+            };
+
+            return View(viewModel);
+
         }
     }
 }

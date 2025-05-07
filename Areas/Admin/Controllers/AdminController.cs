@@ -13,7 +13,7 @@ using System.Net;
 
 namespace Online_Medicine_Donation.Areas.Admin.Controllers
 {
-    //[Authorize(Roles = "Admin")]
+   
     [Area("Admin"), Route("Admin")]
 
     public class AdminController : BaseController

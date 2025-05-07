@@ -40,8 +40,17 @@
                     }
                 </dd>
             </dl>
-            @* <a asp-area="Admin" asp-controller="User" asp-action="EditUser" asp-route-id="@Model.UserId" class="btn btn-danger">Edit Profile</a> *@
-            <a asp-area="Admin" asp-controller="User" asp-action="EditUser" asp-route-id="@Model.UserId" class="btn btn-danger">Edit Profile</a>
-        </div>
+          @*   <form action="/User/UserProfile" method="get" style="display:inline;">
+                <input type="hidden" name="UserId" value="@Model.UserId" />
+                <input type="submit" class="btn btn-sm btn-danger" value="Edit Profile" />
+            </form> *@
+
+            <form action="/User/EditUser" method="get" style="display:inline;">
+                <input type="hidden" name="UserId" value="@Model.UserId" />
+                <input type="submit" class="btn btn-sm btn-primary" value="Edit Profile" />
+            </form>
+
+
+         </div>
     </div>
 </div>

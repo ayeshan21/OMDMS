@@ -124,13 +124,13 @@ namespace Online_Medicine_Donation.Areas.Identity.Pages.Account
                     {
                         var roles = await _userManager.GetRolesAsync(user);
 
-                        if (roles.Contains("DONAR"))
+                        if (roles.Contains("Donor"))
                         {
-                            return LocalRedirect("/User/DonarDashboard");
+                            return LocalRedirect("/User/UserProfileindex");
                         }
                         else if (roles.Contains("NGO"))
                         {
-                            return LocalRedirect("/Ngo/NgoProfileIndex");
+                            return LocalRedirect("/User/UserProfileindex");
                         }
                         else if (roles.Contains("Admin"))
                         {
