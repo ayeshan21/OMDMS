@@ -3,7 +3,7 @@
 @{
 
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    ViewData["Title"] = "NGO History";
+    ViewData["Title"] = "My History";
 
 }
 
@@ -17,10 +17,12 @@
                         <th>Medicine Name</th>
                         <th>Quantity</th>
                         <th>Type</th>
+                        <th>Request's reason</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
+
                     @foreach (var item in Model.EmergencyRequests)
                     {
                         <tr>
@@ -28,6 +30,7 @@
                             <td>@item.emergencyRequest.MedicineName</td>
                             <td>@item.emergencyRequest.Quantity</td>
                             <td>@item.emergencyRequest.Type</td>
+                            <td>@item.emergencyRequest.Reason</td>
                             <td>
                                 @if (item.emergencyRequest.Status == "Accepted")
                                 {

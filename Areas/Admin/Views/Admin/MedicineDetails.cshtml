@@ -8,6 +8,9 @@
     <div class="card shadow-sm">
         <div class="card-body">
             <dl class="row">
+                <dt class="col-sm-4">Donor Name</dt>
+                <dd class="col-sm-8">@Model.userProfile.FullName</dd>
+                
                 <dt class="col-sm-4">Medicine Full Name</dt>
                 <dd class="col-sm-8">@Model.donationRequest.Name</dd>
 
@@ -29,22 +32,48 @@
                 <dt class="col-sm-4">Selected NGO</dt>
                 <dd class="col-sm-8">@Model.donationRequest.SelectNgo</dd>
 
+                <dt class="col-sm-4">Donation Time</dt>
+                <dd class="col-sm-8">@Model.donationRequest.DonationTime</dd>
+
                 <dt class="col-sm-4">Medicine Photo</dt>
                 <dd class="col-sm-8">
-                            @if (!string.IsNullOrEmpty(Model.donationRequest.MedicinePhotoUrl))
-                            {
+                    @if (!string.IsNullOrEmpty(Model.donationRequest.MedicinePhotoUrl))
+                    {
                         <img src="@Model.donationRequest.MedicinePhotoUrl" alt="Profile Picture" height="50" width="100" class="img-thumbnail" />
-                            }
-                            else
-                            {
+                    }
+                    else
+                    {
                         <span class="text-muted">No picture uploaded.</span>
-                            }
+                    }
                 </dd>
             </dl>
-            <form action="/Admin/MedicineDetails" method="post" style="display:inline;">
-                <input type="hidden" name="DonationId" value="@Model.donationRequest.DonationId" />
-                <input type="submit" class="btn btn-sm btn-success" value="Check Validity" />
-            </form>
+            @if (Model.donationRequest.Status == "Accepted")
+            {
+                <span class="btn btn-sm disabled bg-success text-white">Accepted</span>
+
+            }
+            else if (Model.donationRequest.Status == "Rejected")
+            {
+
+                <span class="btn btn-sm disabled bg-danger text-white">Rejected</span>
+
+
+            }
+            else
+            {
+                <form action="/Donor/AcceptRequest" method="post" style="display:inline;">
+                    <input type="hidden" name="DonationId" value="@Model.donationRequest.DonationId" />
+                    <input type="submit" class="btn btn-sm btn-success" value="Accept" />
+                </form>
+
+                <form action="/Donor/RejectRequest" method="post" style="display:inline;">
+                    <input type="hidden" name="DonationId" value="@Model.donationRequest.DonationId" />
+                    <input type="submit" class="btn btn-sm btn-danger" value="Reject" />
+                </form>
+
+            }
+            <a href="/Admin/Tables" class="btn btn-sm btn-primary"><i class="fa-solid fa-arrow-left-long"></i> Back</a>
+
         </div>
     </div>
 </div>

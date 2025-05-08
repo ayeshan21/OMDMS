@@ -22,10 +22,17 @@ namespace Online_Medicine_Donation.DataModel
         [Required]
         [Display(Name = "Medicine Quantity")]
         public int? Quantity { get; set; }
+
         [Required]
         [StringLength(30)]
         [Display(Name = "Medicine Type")]
         public string? Type { get; set; }
+
+        [Required]
+        [StringLength(100)]
+        [Display(Name = "Request's Reason")]
+        public string? Reason { get; set; }
+
         public string? Status { get; set; }
     }
 }

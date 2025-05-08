@@ -38,9 +38,9 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             return View(viewModel);
         }
 
-        [Route("CreateMedicine")]
+        [Route("RequestMedicine")]
         [HttpPost]
-        public async Task<IActionResult> CreateMedicine([FromForm] RequestVM model)
+        public async Task<IActionResult> RequestMedicine([FromForm] RequestVM model)
         {
             if (model == null)
             {
@@ -90,6 +90,8 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                     ExpiryDate = model.donationRequest.ExpiryDate,
                     Condition = model.donationRequest.Condition,
                     SelectNgo = model.donationRequest.SelectNgo,
+                    DonationTime = model.donationRequest.DonationTime,
+                    Status = model.donationRequest.Status,
                     MedicinePhotoUrl = filePath  // Save the path to database
                 };
 
@@ -127,11 +129,11 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
         [Route("DonorHistory")]
         public IActionResult DonorHistory()
         {
-            var donationrequest = _context.DonationRequests.Select(m => new RequestVM
+            var donationrequest = _context.DonationRequests.Where(x=>x.DonationId == currUserGuid).Select(m => new RequestVM
             {
                 donationRequest = new DonationRequest
                 {
-                    DonationId = m.DonationId, // Use existing ID
+                    DonationId = m.DonationId, 
                     Name = m.Name,
                     Quantity = m.Quantity,
                     Company = m.Company,
@@ -139,6 +141,8 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                     Condition = m.Condition,
                     ExpiryDate = m.ExpiryDate,
                     SelectNgo = m.SelectNgo,
+                    DonationTime = m.DonationTime,
+                    Status = m.Status
                 }
             }).ToList();
             var viewModel = new CombinedRequestVM
@@ -148,6 +152,35 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
             return View(viewModel);
           
+        }
+
+        [HttpPost]
+        [Route("AcceptRequest")]
+        public IActionResult AcceptRequest(Guid DonationId)
+        {
+            var donationrequest = _context.DonationRequests.Where(x => x.DonationId == DonationId).FirstOrDefault();
+
+          
+            if (donationrequest != null)
+            {
+                donationrequest.Status = "Accepted";
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Tables", "Admin");
+        }
+
+        [Route("RejectRequest")]
+        [HttpPost]
+        public IActionResult RejectRequest(Guid DonationId)
+        {
+            var donationrequest = _context.DonationRequests.Where(x => x.DonationId == DonationId).FirstOrDefault();
+
+            if (donationrequest != null)
+            {
+                donationrequest.Status = "Rejected";
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Tables", "Admin");
         }
 
     }

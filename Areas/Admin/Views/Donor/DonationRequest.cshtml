@@ -6,22 +6,22 @@
 <form id="medicineForm" method="post" enctype="multipart/form-data" asp-controller="Donor" asp-action="DonationRequest">
     <div class="p-4 bg-light">
         <div class="form-group">
-            <label asp-for="Name" class="control-label">Medicine Full Name *</label>
+            <label asp-for="Name" class="control-label">Medicine Full Name <span style="color:red">*</span></label>
             <input asp-for="donationRequest.Name" class="form-control" id="medName" />
             <span asp-validation-for="Name" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Quantity" class="control-label"> Medicine Quantity *</label>
+            <label asp-for="Quantity" class="control-label"> Medicine Quantity <span style="color:red">*</span></label>
             <input asp-for="donationRequest.Quantity" class="form-control" type="number" min="1" id="quantity" />
             <span asp-validation-for="Quantity" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Company" class="control-label">Pharmaceutical Company *</label>
+            <label asp-for="Company" class="control-label">Pharmaceutical Company <span style="color:red">*</span></label>
             <input asp-for="donationRequest.Company" class="form-control" type="text" id="company" />
             <span asp-validation-for="Company" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Type" class="control-label">Medicine Type *</label>
+            <label asp-for="Type" class="control-label">Medicine Type <span style="color:red">*</span></label>
             <select asp-for="donationRequest.Type" class="form-control" id="type">
                 <option value="Tablet">Tablet</option>
                 <option value="Capsule">Capsule</option>
@@ -29,16 +29,17 @@
                 <option value="Ointment">Ointment</option>
                 <option value="Injection">Injection</option>
                 <option value="Inhaler">Inhaler</option>
+                <option value="OralSaline">Oral Saline</option>
             </select>
             <span asp-validation-for="Type" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="ExpiryDate" class="control-label">Expiry Date *</label>
+            <label asp-for="ExpiryDate" class="control-label">Expiry Date <span style="color:red">*</span></label>
             <input asp-for="donationRequest.ExpiryDate" class="form-control" type="date" id="expiryDate" />
             <span asp-validation-for="ExpiryDate" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Condition" class="control-label">Medicine Condition *</label>
+            <label asp-for="Condition" class="control-label">Medicine Condition <span style="color:red">*</span></label>
             <select asp-for="donationRequest.Condition" class="form-control" id="condition">
                 <option value="Sealed">Sealed</option>
                 <option value="Opened">Opened</option>
@@ -46,7 +47,12 @@
             <span asp-validation-for="Condition" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="SelectNgo" class="control-label">Select NGO *</label>
+            <label asp-for="DonationTime" class="control-label">Donation Time <span style="color:red">*</span></label>
+            <input asp-for="donationRequest.DonationTime" class="form-control" type="date" id="donationTime" />
+            <span asp-validation-for="DonationTime" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="SelectNgo" class="control-label">Select NGO <span style="color:red">*</span></label>
             <select asp-for="donationRequest.SelectNgo" class="form-control" id="selectNgo">
                 <option value="">-- Select NGO --</option>
                 @foreach (var item in Model.NgoList)
@@ -57,7 +63,7 @@
             <span asp-validation-for="SelectNgo" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="PhotoFile" class="control-label">Medicine Photo *</label>
+            <label asp-for="PhotoFile" class="control-label">Medicine Photo <span style="color:red">*</span></label>
             <input type="file" asp-for="PhotoFile" class="form-control-file" id="medicinePhoto" name="PhotoFile" />
             <span asp-validation-for="PhotoFile" class="text-danger"></span>
         </div>
@@ -85,6 +91,8 @@
                 formdata.append("donationRequest.ExpiryDate", $("#expiryDate").val());
                 formdata.append("donationRequest.Condition", $("#condition").val());
                 formdata.append("donationRequest.SelectNgo", $("#selectNgo").val());
+                formdata.append("donationRequest.DonationTime", $("#donationTime").val());
+
 
                 var fileInput = $("#medicinePhoto")[0];
                 if (fileInput.files.length > 0) {
@@ -96,7 +104,7 @@
                     console.log(pair[0] + ': ' + (pair[0] === 'PhotoFile' ? pair[1].name : pair[1]));
                 }
                 $.ajax({
-                    url: "/Donor/CreateMedicine",
+                    url: "/Donor/RequestMedicine",
                     type: "POST",
                     data: formdata,
                     contentType: false,
@@ -106,6 +114,15 @@
                             title: "Request Sent!",
                             icon: "success"
                         });
+                        $("#medName").val('');
+                        $("#quantity").val('');
+                        $("#company").val('');
+                        $("#type").val('');
+                        $("#expiryDate").val('');
+                        $("#condition").val('');
+                        $("#donationTime").val('');
+                        $("#selectNgo").val('');
+                        $("#medicinePhoto").val('');
                     },
                     error: function (xhr, status, error) {
                         console.error("Error details:", xhr.responseText);

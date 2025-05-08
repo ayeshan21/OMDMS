@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Online_Medicine_Donation.Data;
 
@@ -11,9 +12,11 @@ using Online_Medicine_Donation.Data;
 namespace Online_Medicine_Donation.Migrations
 {
     [DbContext(typeof(OnlineMedicineContext))]
-    partial class OnlineMedicineContextModelSnapshot : ModelSnapshot
+    [Migration("20250508050622_addReasonColumn")]
+    partial class addReasonColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -241,10 +244,6 @@ namespace Online_Medicine_Donation.Migrations
                     b.Property<Guid?>("DonationId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime?>("DonationTime")
-                        .IsRequired()
-                        .HasColumnType("datetime2");
-
                     b.Property<DateTime?>("ExpiryDate")
                         .IsRequired()
                         .HasColumnType("datetime2");
@@ -266,9 +265,6 @@ namespace Online_Medicine_Donation.Migrations
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
                         .IsRequired()

@@ -49,14 +49,16 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             }
 
         }
-        /* [Route("UserProfile")]
-
-         public IActionResult UserProfile(UserProfile model)
-         {
-
-             return View(model);
-
-         }*/
+        [Route("UserProfile")]
+        public IActionResult UserProfile(Guid UserId)
+        {
+            var profile = _context.UserProfiles.FirstOrDefault(x => x.UserId == UserId);
+            if (profile == null)
+            {
+                return NotFound();
+            }
+            return View(profile);
+        }
 
 
         [Route("CreateUser")]
@@ -156,19 +158,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             }
         }
 
-  
-        [Route("UserProfile")]
-        public IActionResult UserProfile(Guid UserId)
-        {
-            var profile = _context.UserProfiles.FirstOrDefault(x => x.UserId == UserId);
-            if (profile == null)
-            {
-                return NotFound();
-            }
-            return View(profile);
-        }
-
-
+ 
         [Route("EditUser")]
         [HttpGet]
         public IActionResult EditUser(Guid UserId)

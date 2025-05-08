@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Online_Medicine_Donation.Data;
 
@@ -11,9 +12,11 @@ using Online_Medicine_Donation.Data;
 namespace Online_Medicine_Donation.Migrations
 {
     [DbContext(typeof(OnlineMedicineContext))]
-    partial class OnlineMedicineContextModelSnapshot : ModelSnapshot
+    [Migration("20250508090826_addDonationTime")]
+    partial class addDonationTime
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -266,9 +269,6 @@ namespace Online_Medicine_Donation.Migrations
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Status")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Type")
                         .IsRequired()

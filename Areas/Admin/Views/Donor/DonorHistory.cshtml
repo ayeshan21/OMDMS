@@ -3,7 +3,7 @@
 @{
 
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    ViewData["Title"] = "Donor History";
+    ViewData["Title"] = "My History";
 
 }
 
@@ -22,6 +22,7 @@
                         <th>Condition</th>
                         <th>Expiry date</th>
                         <th>Selected NGO</th>
+                        <th>Donation Time</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -36,16 +37,30 @@
                             <td>@item.donationRequest.Condition</td>
                             <td>@item.donationRequest.ExpiryDate</td>
                             <td>@item.donationRequest.SelectNgo</td>
+                            <td>@item.donationRequest.DonationTime</td>
+                           
                             <td>
-                                <form action="/Admin/MedicineDetails" method="get" style="display:inline;">
-                                    <input type="hidden" name="DonationId" value="@item.donationRequest.DonationId" />
-                                    <input type="submit" class="btn btn-sm btn-primary" value="Details" />
-                                </form>
+                                @if (item.donationRequest.Status == "Accepted")
+                                {
+                                    <span class="btn btn-sm disabled bg-success text-white">Accepted</span>
+
+                                }
+                                else if (item.donationRequest.Status == "Rejected")
+                                {
+                                    <span class="btn btn-sm disabled bg-danger text-white">Rejected</span>
+                                }
+                                else
+                                {
+                                    <form action="/Admin/AcceptRequest" method="post" style="display:inline;">
+                                        <input type="hidden" name="EmergencyId" value="@item.donationRequest.DonationId" />
+                                        <input type="submit" class="btn btn-sm btn-info disabled" value="Pending" />
+                                    </form>
+                                }
                             </td>
                         </tr>
                     }
-                    </tbody>
-                </table>
-            </div>
+                </tbody>
+            </table>
         </div>
     </div>
+</div>

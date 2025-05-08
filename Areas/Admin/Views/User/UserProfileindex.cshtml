@@ -7,25 +7,25 @@
 <form id="userProfileForm" method="post" enctype="multipart/form-data">
     <div class="p-4 bg-light">
         <div class="form-group">
-            <label asp-for="FullName" class="control-label">Full Name *</label>
+            <label asp-for="FullName" class="control-label">Full Name <span style="color:red">*</span></label>
             <input asp-for="FullName" class="form-control" id="fullname" />
             <span asp-validation-for="FullName" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="Email" class="control-label">Email *</label>
+            <label asp-for="Email" class="control-label">Email <span style="color:red">*</span></label>
             <input asp-for="Email" class="form-control" type="email" id="email" />
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="PhoneNumber" class="control-label">Phone Number *</label>
+            <label asp-for="PhoneNumber" class="control-label">Phone Number <span style="color:red">*</span></label>
             <input asp-for="PhoneNumber" class="form-control" type="tel" id="phone" />
             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
         </div>
 
         <div class="form-group">
-            <label asp-for="Address" class="control-label">Address *</label>
+            <label asp-for="Address" class="control-label">Address <span style="color:red">*</span></label>
             <textarea asp-for="Address" class="form-control" id="address"></textarea>
             <span asp-validation-for="Address" class="text-danger"></span>
         </div>
@@ -36,7 +36,7 @@
             <span asp-validation-for="NgoCode" class="text-danger"></span>
         </div>
         <div class="form-group">
-            <label asp-for="Role" class="control-label">I am interested to be: *</label>
+            <label asp-for="Role" class="control-label">I am interested to be: <span style="color:red">*</span></label>
             <select asp-for="Role" class="form-control" id="role">
                 <option value="Donor">Donor</option>
                 <option value="NGO">NGO</option>
@@ -45,10 +45,10 @@
         </div>
 
         <div class="form-group">
-            <label asp-for="ProfilePictureUrl" class="control-label">Profile Picture *</label>
+            <label asp-for="ProfilePictureUrl" class="control-label">Profile Picture <span style="color:red">*</span></label>
             <input type="file" asp-for="ProfilePictureFile" class="form-control-file" id="picture" />
             <span asp-validation-for="ProfilePictureUrl" class="text-danger"></span>
-        </div>
+        </div>  
         <div class="form-group d-flex justify-content-between">
             <input type="submit" value="Save Profile" class="btn btn-success" id="save_profile" />
         </div>
@@ -97,6 +97,13 @@
                             title: "Saved!",
                             icon: "success"
                         });
+                        $("#fullname").val('');
+                        $("#email").val('');
+                        $("#phone").val('');
+                        $("#address").val('');
+                        $("#ngocode").val('');
+                        $("#role").val('');
+                        $("#picture").val('');
                     },
                     error: function (xhr, status, error) {
                         console.error("Error details:", xhr.responseText);

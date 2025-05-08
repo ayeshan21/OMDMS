@@ -30,9 +30,9 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             return View();
         }
 
-        [Route("CreateMedicine")]
+        [Route("RequestMedicine")]
         [HttpPost]
-        public async Task<IActionResult> CreateMedicine([FromForm] RequestVM model)
+        public async Task<IActionResult> RequestMedicine([FromForm] RequestVM model)
         {
             if (model == null)
             {
@@ -47,6 +47,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                     MedicineName = model.emergencyRequest.MedicineName,
                     Quantity = model.emergencyRequest.Quantity,   
                     Type = model.emergencyRequest.Type,
+                    Reason = model.emergencyRequest.Reason
                 };
 
                 _context.EmergencyRequests.Add(data);
@@ -63,7 +64,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
         [Route("NGOHistory")]
         public IActionResult NGOHistory()
         {
-            var emergencyrequest = _context.EmergencyRequests.Select(m => new RequestVM
+            var emergencyrequest = _context.EmergencyRequests.Where(x => x.EmergencyId == currUserGuid).Select(m => new RequestVM
             {
                 emergencyRequest = new EmergencyRequest
                 {
@@ -72,6 +73,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                     MedicineName = m.MedicineName,
                     Quantity = m.Quantity,
                     Type = m.Type,
+                    Reason = m.Reason,
                     Status = m.Status
                 }
             }).ToList();

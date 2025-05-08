@@ -47,6 +47,12 @@ namespace Online_Medicine_Donation.DataModel
         [Display(Name = "Medicine Photo URL")]
         public string? MedicinePhotoUrl { get; set; }
 
+        [Required]
+        [Display(Name = "Donation Time")]
+        public DateTime? DonationTime { get; set; }
+
+        public string? Status { get; set; }
+
     }
 }
 

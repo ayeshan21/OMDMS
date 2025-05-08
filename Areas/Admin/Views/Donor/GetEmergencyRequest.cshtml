@@ -13,6 +13,7 @@
                         <th>Medicine Name</th>
                         <th>Quantity</th>
                         <th>Type</th>
+                        <th>Request's reason</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -24,9 +25,13 @@
                             <td>@item.emergencyRequest.MedicineName</td>
                             <td>@item.emergencyRequest.Quantity</td>
                             <td>@item.emergencyRequest.Type</td>
+                            <td>@item.emergencyRequest.Reason</td>
+
                             <td> 
-                                <button asp-action="Donate" asp-route-id="@item.emergencyRequest.EmergencyId" class="btn btn-sm btn-success">Donate Now!</button>
-                            </td>
+                         
+                                    <button class="btn btn-sm btn-success disabled">Donate Now!</button>
+
+                             </td>
                         </tr>
                     }
                 </tbody>

@@ -75,11 +75,8 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                     DonationId = m.DonationId, // Use existing ID
                     Name = m.Name,
                     Quantity = m.Quantity,
-                    Company = m.Company,
                     Type = m.Type,
-                    Condition = m.Condition,
-                    ExpiryDate = m.ExpiryDate,
-                    SelectNgo = m.SelectNgo,
+                    Status = m.Status
                 }
             }).ToList();
 
@@ -92,6 +89,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                     MedicineName = m.MedicineName,
                     Quantity = m.Quantity,
                     Type = m.Type,
+                    Reason = m.Reason,
                     Status = m.Status
                 }
             }).ToList();
@@ -108,25 +106,29 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
         [Route("AcceptRequest")]
         public IActionResult AcceptRequest(Guid EmergencyId)
         {
-            var request = _context.EmergencyRequests.Where(x=>x.EmergencyId == EmergencyId).FirstOrDefault();
-            if (request != null)
+            var emergencyrequest = _context.EmergencyRequests.Where(x=>x.EmergencyId == EmergencyId).FirstOrDefault();
+
+            if (emergencyrequest != null)
             {
-                request.Status = "Accepted";
+                emergencyrequest.Status = "Accepted";
                 _context.SaveChanges();
             }
+        
             return RedirectToAction("Tables");
         }
 
         [Route("RejectRequest")]
         [HttpPost]
-        public IActionResult RejectRequest(int EmergencyId)
+        public IActionResult RejectRequest(Guid EmergencyId)
         {
-            var request = _context.EmergencyRequests.Find(EmergencyId);
-            if (request != null)
+            var emergencyrequest = _context.EmergencyRequests.Where(x => x.EmergencyId == EmergencyId).FirstOrDefault();
+
+            if (emergencyrequest != null)
             {
-                request.Status = "Rejected";
+                emergencyrequest.Status = "Rejected";
                 _context.SaveChanges();
             }
+          
             return RedirectToAction("Tables");
         }
 
@@ -136,6 +138,8 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
         public IActionResult MedicineDetails(Guid DonationId)
         {
             var donation = _context.DonationRequests.FirstOrDefault(d => d.DonationId == DonationId);
+            var specificDonor = _context.UserProfiles.FirstOrDefault(u => u.Role == "Donor" && u.UserId == DonationId); 
+
 
             if (donation == null)
             {
@@ -144,7 +148,8 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
             var viewModel = new RequestVM
             {
-                donationRequest = donation
+                donationRequest = donation,
+                userProfile = specificDonor
             };
 
             return View(viewModel); 
