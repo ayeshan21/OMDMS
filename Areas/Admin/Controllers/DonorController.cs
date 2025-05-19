@@ -27,15 +27,40 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
         }
 
         [Route("DonationRequest")]
-        public IActionResult DonationRequest()
+        public IActionResult DonationRequest(int? Id)
         {
-            var viewModel = new RequestVM
-            {
-                donationRequest = new DonationRequest(),
-                NgoList = _context.UserProfiles.Where(u => u.Role == "NGO").ToList()
-            };
 
-            return View(viewModel);
+             var EmergencyRequests = _context.EmergencyRequests.Where(x=>x.Status== "Accepted")
+                 .FirstOrDefault(x => x.Id == Id);
+
+             if (EmergencyRequests !=null)
+             { 
+                 // Create the view model and ensure ALL properties are mapped properly
+                 var viewModel = new RequestVM
+                 {
+                     donationRequest = new DonationRequest()
+                     {
+                         Id = EmergencyRequests.Id,
+                         Name = EmergencyRequests.MedicineName,
+                         Quantity = EmergencyRequests.Quantity,
+                         Type = EmergencyRequests.Type
+                     },
+                      NgoList = _context.UserProfiles.Where(u => u.Role == "NGO").ToList()
+            };
+               
+                 return View(viewModel);
+             }
+
+             else
+            {
+                var viewModel = new RequestVM
+                {
+                    donationRequest = new DonationRequest(),
+                    NgoList = _context.UserProfiles.Where(u => u.Role == "NGO").ToList()
+                };
+
+                return View(viewModel);
+            }
         }
 
         [Route("RequestMedicine")]
@@ -156,9 +181,9 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
         [HttpPost]
         [Route("AcceptRequest")]
-        public IActionResult AcceptRequest(Guid DonationId)
+        public IActionResult AcceptRequest(int Id)
         {
-            var donationrequest = _context.DonationRequests.Where(x => x.DonationId == DonationId).FirstOrDefault();
+            var donationrequest = _context.DonationRequests.Where(x => x.Id == Id).FirstOrDefault();
 
           
             if (donationrequest != null)
@@ -171,9 +196,9 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
         [Route("RejectRequest")]
         [HttpPost]
-        public IActionResult RejectRequest(Guid DonationId)
+        public IActionResult RejectRequest(int Id)
         {
-            var donationrequest = _context.DonationRequests.Where(x => x.DonationId == DonationId).FirstOrDefault();
+            var donationrequest = _context.DonationRequests.Where(x => x.Id == Id).FirstOrDefault();
 
             if (donationrequest != null)
             {

@@ -10,12 +10,13 @@ using Online_Medicine_Donation.ViewModel;
 using Online_Medicine_Donation.DataModel;
 using System.Net.Mail;
 using System.Net;
+using Online_Medicine_Donation.DataModel.Online_Medicine_Donation.Models;
 
 namespace Online_Medicine_Donation.Areas.Admin.Controllers
 {
    
     [Area("Admin"), Route("Admin")]
-
+    //[Authorize(Roles = "Admin")]
     public class AdminController : BaseController
 
     {
@@ -31,7 +32,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
         {
             var ngoCount = _context.UserProfiles.Where(x => x.Role == "NGO").Count();
             var donorCount = _context.UserProfiles.Where(x => x.Role == "Donor").Count();
-            var medicineCount = _context.Medicines.Count();
+            var medicineCount = _context.MedicineInventories.Count();
 
             ViewBag.NgoCount = ngoCount;
             ViewBag.DonorCount = donorCount;
@@ -72,6 +73,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             {
                 donationRequest = new DonationRequest
                 {
+                    Id=m.Id,
                     DonationId = m.DonationId, // Use existing ID
                     Name = m.Name,
                     Quantity = m.Quantity,
@@ -84,12 +86,14 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             {
                 emergencyRequest = new EmergencyRequest
                 {
+                    Id=m.Id,
                     EmergencyId = m.EmergencyId, // Use existing ID
                     NgoName = m.NgoName,
                     MedicineName = m.MedicineName,
                     Quantity = m.Quantity,
                     Type = m.Type,
                     Reason = m.Reason,
+                    Days = m.Days,
                     Status = m.Status
                 }
             }).ToList();
@@ -104,9 +108,9 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
         }
         [HttpPost]
         [Route("AcceptRequest")]
-        public IActionResult AcceptRequest(Guid EmergencyId)
+        public IActionResult AcceptRequest(int EmergencyId)
         {
-            var emergencyrequest = _context.EmergencyRequests.Where(x=>x.EmergencyId == EmergencyId).FirstOrDefault();
+            var emergencyrequest = _context.EmergencyRequests.Where(x=>x.Id == EmergencyId).FirstOrDefault();
 
             if (emergencyrequest != null)
             {
@@ -119,9 +123,9 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
         [Route("RejectRequest")]
         [HttpPost]
-        public IActionResult RejectRequest(Guid EmergencyId)
+        public IActionResult RejectRequest(int EmergencyId)
         {
-            var emergencyrequest = _context.EmergencyRequests.Where(x => x.EmergencyId == EmergencyId).FirstOrDefault();
+            var emergencyrequest = _context.EmergencyRequests.Where(x => x.Id == EmergencyId).FirstOrDefault();
 
             if (emergencyrequest != null)
             {
@@ -135,10 +139,10 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
         [Route("MedicineDetails")]
         [HttpGet]
-        public IActionResult MedicineDetails(Guid DonationId)
+        public IActionResult MedicineDetails(int Id)
         {
-            var donation = _context.DonationRequests.FirstOrDefault(d => d.DonationId == DonationId);
-            var specificDonor = _context.UserProfiles.FirstOrDefault(u => u.Role == "Donor" && u.UserId == DonationId); 
+            var donation = _context.DonationRequests.FirstOrDefault(d => d.Id == Id);
+            var specificDonor = _context.UserProfiles.FirstOrDefault(u => u.Role == "Donor"); 
 
 
             if (donation == null)
@@ -153,6 +157,35 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             };
 
             return View(viewModel); 
+        }
+
+        [Route("DonatedMedicine")]
+       
+        public IActionResult DonatedMedicine()
+        {
+            var medicineList = (from donation in _context.DonationRequests    
+                                join userProfile in _context.UserProfiles
+                                    on donation.DonationId equals userProfile.UserId
+                                select new RequestVM
+                                {
+                                        Name = donation.Name,
+                                        Quantity = donation.Quantity,
+                                        Type = donation.Type,
+                                        Condition = donation.Condition,
+                                        ExpiryDate = donation.ExpiryDate,
+                                        DonationTime = donation.DonationTime,
+                                        FullName = userProfile.FullName,
+                                        Address = userProfile.Address,
+                                        PhoneNumber = userProfile.PhoneNumber,
+                                        Status = donation.Status   
+                                }).ToList();
+
+            var viewModel = new CombinedRequestVM
+            {
+                DonationRequests = medicineList
+            };
+
+            return View(viewModel);
         }
     }
 }

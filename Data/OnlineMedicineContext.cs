@@ -14,9 +14,10 @@ namespace Online_Medicine_Donation.Data
         }
 
         public DbSet<UserProfile>UserProfiles { get; set; }
-        public DbSet<Medicine> Medicines { get; set; }
+        public DbSet<MedicineInventory> MedicineInventories { get; set; }
         public DbSet<DonationRequest> DonationRequests { get; set; }
         public DbSet<EmergencyRequest> EmergencyRequests { get; set; }
+        public DbSet<WithdrawRequest> WithdrawRequests { get; set; }
     }
 
 }

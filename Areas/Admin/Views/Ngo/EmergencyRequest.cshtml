@@ -44,6 +44,12 @@
             <span asp-validation-for="Reason" class="text-danger"></span>
         </div>
 
+        <div class="form-group">
+            <label asp-for="Days" class="control-label"> When do you need medicine?<span style="color:red">*</span></label>
+            <input asp-for="donationRequest.Days" class="form-control" type="date" id="days" />
+            <span asp-validation-for="Days" class="text-danger"></span>
+        </div>
+
         <div class="form-group d-flex justify-content-between">
             <input type="submit" value="Send emergency request" class="btn btn-success" id="requestMedicine" name="requestmedicine"/>
         </div>
@@ -67,6 +73,7 @@
                 formdata.append("emergencyRequest.Quantity", $("#quantity").val());
                 formdata.append("emergencyRequest.Type", $("#type").val());
                 formdata.append("emergencyRequest.Reason", $("#reason").val());
+                formdata.append("emergencyRequest.Days", $("#days").val());
           
                 $.ajax({
                     url: "/Ngo/RequestMedicine",
@@ -84,6 +91,7 @@
                         $("#quantity").val('');
                         $("#type").val('');
                         $("#reason").val('');
+                        $("#days").val('');
                     },
                     error: function (xhr, status, error) {
                         console.error("Error details:", xhr.responseText);

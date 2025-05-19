@@ -185,8 +185,6 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                 ProfilePictureUrl = profile.ProfilePictureUrl
             };
 
-  
-
             return View(model);
         }
         [Route("EditUser")]

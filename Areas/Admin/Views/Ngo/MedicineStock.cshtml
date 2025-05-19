@@ -1,0 +1,128 @@
+﻿@model Online_Medicine_Donation.ViewModel.CombinedRequestVM
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Medicine Stock";
+}
+
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Medicine Name</th>
+                        <th>Quantity</th>
+                        <th>Medicine Type</th>
+                        <th>Donor Name</th>
+                        <th>Donor Address</th>
+                        <th>Donor Contact</th>
+                        <th>Donation Time</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.DonationRequests)
+                    {
+                        <tr>
+                            <td>@item.donationRequest.Name</td>
+                            <td>@item.donationRequest.Quantity</td>
+                            <td>@item.donationRequest.Type</td>
+                            <td>@item.userProfile?.FullName</td>
+                            <td>@item.userProfile?.Address</td>
+                            <td>@item.userProfile?.PhoneNumber</td>
+                            <td>@item.donationRequest.DonationTime</td>
+                            <td>
+                                @if (item.donationRequest.Status == "Accepted")
+                                {
+                                    <button type="button" class="btn btn-sm bg-primary text-white"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#staticBackdrop"
+                                            data-medicine-name="@item.donationRequest.Name"
+                                            data-ngo-name="@item.donationRequest.SelectNgo">
+                                            
+                                        <!-- Add this line -->
+                                        Withdraw
+                                    </button>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Medicine Withdraw</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form action="/Ngo/Withdraw" method="post">
+                <div class="modal-body">
+                    <input type="hidden" id="ngoId" name="NgoId" value="@User.FindFirst("NgoId")?.Value" />
+
+                    <div class="form-group">
+                        <label for="NgoName" class="control-label">NGO Name <span style="color:red">*</span></label>
+                        <input name="NgoName" class="form-control" id="ngoName" required />
+                        <span class="text-danger field-validation-valid" data-valmsg-for="NgoName"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="MedicineName" class="control-label">Medicine Full Name <span style="color:red">*</span></label>
+                        <input name="MedicineName" class="form-control" id="medName" required />
+                        <span class="text-danger field-validation-valid" data-valmsg-for="MedicineName"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="Quantity" class="control-label"> Medicine Quantity <span style="color:red">*</span></label>
+                        <input name="Quantity" class="form-control" type="number" min="1" id="quantity" required />
+                        <span class="text-danger field-validation-valid" data-valmsg-for="Quantity"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="WithdrawTime" class="control-label">Withdraw Time <span style="color:red">*</span></label>
+                        <input name="WithdrawTime" class="form-control" type="date" id="withdrawTime" required />
+                        <span class="text-danger field-validation-valid" data-valmsg-for="WithdrawTime"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="Purpose" class="control-label">Withdraw purpose <span style="color:red">*</span></label>
+                        <input name="Purpose" class="form-control" type="text" id="purpose" required />
+                        <span class="text-danger field-validation-valid" data-valmsg-for="Purpose"></span>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            // When the modal is shown, populate fields based on the medicine data
+            $('#staticBackdrop').on('show.bs.modal', function (event) {
+                var button = $(event.relatedTarget);
+                var medicineId = button.data('medicine-id');
+                var medicineName = button.data('medicine-name');
+                var ngoName = button.data('ngo-name');
+            
+
+                // Set values in the modal form
+           
+                $('#medName').val(medicineName);
+                $('#ngoName').val(ngoName);
+
+
+                // Set current date as default withdraw date
+                var today = new Date();
+                var dateString = today.toISOString().slice(0, 10);
+                $('#withdrawTime').val(dateString);
+            });
+        });
+    </script>
+}

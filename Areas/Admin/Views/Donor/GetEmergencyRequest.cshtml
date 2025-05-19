@@ -10,10 +10,12 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
+                        <th>NGO Name</th>
                         <th>Medicine Name</th>
                         <th>Quantity</th>
                         <th>Type</th>
                         <th>Request's reason</th>
+                        <th>When to deliver</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -21,16 +23,19 @@
                     @foreach (var item in Model.EmergencyRequests)
                     {
                         <tr>
-                  
+                            <td>@item.emergencyRequest.NgoName</td>
                             <td>@item.emergencyRequest.MedicineName</td>
                             <td>@item.emergencyRequest.Quantity</td>
                             <td>@item.emergencyRequest.Type</td>
                             <td>@item.emergencyRequest.Reason</td>
+                            <td>@item.emergencyRequest.Days</td>
 
                             <td> 
-                         
-                                    <button class="btn btn-sm btn-success disabled">Donate Now!</button>
-
+@*                               <a href="/Donor/DonationRequest" name="Id" class="btn btn-sm btn-success">Donate Now!</a>
+ *@                                <form action="/Donor/DonationRequest" method="get" style="display:inline;">
+                                    <input type="hidden" name="Id" value="@item.emergencyRequest.Id" />
+                                    <input type="submit" class="btn btn-sm btn-success" value="Donate Now!" />
+                                </form> 
                              </td>
                         </tr>
                     }

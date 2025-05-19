@@ -166,11 +166,25 @@ fs-4 fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
                                 <i class="mdi mdi-table-large menu-icon"></i>
                             </a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Admin" asp-action="">
+                            <a class="nav-link" data-bs-toggle="collapse" href="#reportsSubmenu" role="button" aria-expanded="false" aria-controls="reportsSubmenu">
                                 <span class="menu-title">Reports</span>
                                 <i class="mdi mdi-chart-bar menu-icon"></i>
+                                <i class="fa fa-chevron-down" id="arrowIcon"></i>
                             </a>
+                            <div class="collapse" id="reportsSubmenu">
+                                <ul class="nav flex-column sub-menu">
+                                    <li class="nav-item">
+                                        <a class="nav-link d-flex align-items-center justify-content-between" asp-controller="Admin" asp-action="DonatedMedicine">
+                                            Donated Medicine
+                                            <i class="fa-solid fa-pills ms-4"></i> <!-- Icon first, margin on the right -->
+                   
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+
                         </li>
 
                     }
@@ -191,14 +205,14 @@ fs-4 fw-bold" asp-area="" asp-controller="Home" asp-action="Index">
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Ngo" asp-action="">
+                            <a class="nav-link" asp-controller="Ngo" asp-action="MedicineStock">
                                 <span class="menu-title">Medicine Stock</span>
                                 <i class="mdi mdi-table-large menu-icon"></i>
                             </a>
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="NGO" asp-action="NGOHistory">
+                            <a class="nav-link" asp-controller="Ngo" asp-action="NGOHistory">
                                 <span class="menu-title">My history</span>
                                 <i class="fa-solid fa-clipboard-list menu-icon"></i>
                             </a>

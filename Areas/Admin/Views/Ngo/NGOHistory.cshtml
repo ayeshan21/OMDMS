@@ -18,6 +18,7 @@
                         <th>Quantity</th>
                         <th>Type</th>
                         <th>Request's reason</th>
+                        <th>When to deliver</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -31,6 +32,7 @@
                             <td>@item.emergencyRequest.Quantity</td>
                             <td>@item.emergencyRequest.Type</td>
                             <td>@item.emergencyRequest.Reason</td>
+                            <td>@item.emergencyRequest.Days</td>
                             <td>
                                 @if (item.emergencyRequest.Status == "Accepted")
                                 {

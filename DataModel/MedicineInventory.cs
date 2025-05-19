@@ -1,13 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Online_Medicine_Donation.DataModel
 {
-    public class Medicine
+    public class MedicineInventory
     {
         [Key]
         public int? Id { get; set; }
 
-        public Guid? MedicineId { get; set; }
+        public Guid? UserId { get; set; }
+
+
+        [ForeignKey("DonationRequestsId")]
+        public int DonationRequestsId { get; set; }
 
         [Required]
         [StringLength(100)]
@@ -37,6 +42,8 @@ namespace Online_Medicine_Donation.DataModel
         [Display(Name = "Medicine Condition")]
         [StringLength(30)]
         public string? Condition { get; set; }
+
+        public string? Status { get; set; }
 
         [Required]
         [Display(Name = "Medicine Photo URL")]

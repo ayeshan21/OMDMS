@@ -29,17 +29,26 @@
                                     <span class="btn btn-sm disabled bg-success text-white">Accepted</span>
 
                                 }
-                                else 
+                                else if (item.donationRequest.Status == "Rejected")
 
                                 {
-                                    @if (item.donationRequest.Status == "Rejected")
-                                    {
-                                        <span class="btn btn-sm disabled bg-danger text-white">Rejected</span>
-
-                                    }
+                                    <span class="btn btn-sm disabled bg-danger text-white">Rejected</span>
                                 }
+                                else
+                                {
+                                    <form action="/Donor/AcceptRequest" method="post" style="display:inline;">
+                                        <input type="hidden" name="Id" value="@item.donationRequest.Id" />
+                                        <input type="submit" class="btn btn-sm btn-success" value="Accept" />
+                                    </form>
+
+                                    <form action="/Donor/RejectRequest" method="post" style="display:inline;">
+                                        <input type="hidden" name="Id" value="@item.donationRequest.Id" />
+                                        <input type="submit" class="btn btn-sm btn-danger" value="Reject" />
+                                    </form>
+                                }
+                                
                                 <form action="/Admin/MedicineDetails" method="get" style="display:inline;">
-                                    <input type="hidden" name="DonationId" value="@item.donationRequest.DonationId" />
+                                    <input type="hidden" name="Id" value="@item.donationRequest.Id" />
                                     <input type="submit" class="btn btn-sm btn-primary" value="Details" />
                                 </form>
 
@@ -64,6 +73,7 @@
                         <th>Quantity</th>
                         <th>Type</th>
                         <th>Request's reason</th>
+                        <th>When to deliver</th>
                         <th>Action</th>
                     </tr>
                 </thead>
@@ -76,6 +86,7 @@
                             <td>@item.emergencyRequest.Quantity</td>
                             <td>@item.emergencyRequest.Type</td>
                             <td>@item.emergencyRequest.Reason</td>
+                            <td>@item.emergencyRequest.Days</td>
                             <td>
                                 @if (item.emergencyRequest.Status == "Accepted")
                                 {
@@ -89,12 +100,12 @@
                                 else
                                 {
                                     <form action="/Admin/AcceptRequest" method="post" style="display:inline;">
-                                        <input type="hidden" name="EmergencyId" value="@item.emergencyRequest.EmergencyId" />
+                                        <input type="hidden" name="EmergencyId" value="@item.emergencyRequest.Id" />
                                         <input type="submit" class="btn btn-sm btn-success" value="Accept" />
                                     </form>
 
                                     <form action="/Admin/RejectRequest" method="post" style="display:inline;">
-                                        <input type="hidden" name="EmergencyId" value="@item.emergencyRequest.EmergencyId" />
+                                        <input type="hidden" name="EmergencyId" value="@item.emergencyRequest.Id" />
                                         <input type="submit" class="btn btn-sm btn-danger" value="Reject" />
                                     </form>
                                 }

@@ -1,0 +1,76 @@
+﻿@model Online_Medicine_Donation.ViewModel.CombinedRequestVM 
+@{
+    Layout="~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Donated Medicine";
+}
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Medicine Name</th>
+                        <th>Quantity</th>
+                        <th>Medicine Type</th>
+                        <th>Medicine Condition</th>
+                        <th>Expiry Date</th>
+                        <th>Donor Name</th>
+                        <th>Donor Address</th>
+                        <th>Donor Contact</th>
+                        <th>Donation Time</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if(Model.DonationRequests != null)
+                    { @foreach (var item in Model.DonationRequests)
+                        {
+                         var expiry = item.ExpiryDate.GetValueOrDefault();
+                            var isExpired = expiry < DateTime.Now;
+                            var daysLeft = (expiry - DateTime.Now).TotalDays;
+                            var isExpiringSoon = daysLeft <= 7 && !isExpired;
+
+                           
+
+                            // Apply background color based on expiry condition
+                            //var rowClass = isExpired ? "" : isExpiringSoon ? "bg-danger text-black" : "";
+
+                            var rowClass = "";
+
+                            if (isExpired)
+                            {
+                                rowClass = "table-danger text-danger";
+                            }
+                            else if (isExpiringSoon)
+                            {
+                                rowClass = "table-warning text-danger";
+                            }
+                            else
+                            {
+                                rowClass = "";
+                            }
+
+                            
+                                <tr class="@rowClass">
+                                    <td>@item.Name</td>
+                                    <td>@item.Quantity</td>
+                                    <td>@item.Type</td>
+                                    <td>@item.Condition</td>
+                                    <td>@expiry.ToShortDateString()</td>
+                                    <td>@item.FullName</td>
+                                    <td>@item.Address</td>
+                                    <td>@item.PhoneNumber</td>
+                                    <td>@item.DonationTime</td>
+                                    <td>@item.Status</td>
+                                </tr>
+                            
+
+                        }
+                        
+                    }
+                   
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

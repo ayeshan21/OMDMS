@@ -33,6 +33,13 @@ namespace Online_Medicine_Donation.DataModel
         [Display(Name = "Request's Reason")]
         public string? Reason { get; set; }
 
+        [Required]
+        [Display(Name = "Days")]
+        [DataType(DataType.Date)]
+        public DateTime? Days { get; set; }
+
         public string? Status { get; set; }
+
+     
     }
 }

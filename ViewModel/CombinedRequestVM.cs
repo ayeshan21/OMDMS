@@ -1,4 +1,5 @@
-﻿using Online_Medicine_Donation.ViewModel;
+﻿using Online_Medicine_Donation.DataModel;
+using Online_Medicine_Donation.ViewModel;
 
 namespace Online_Medicine_Donation.ViewModel
 {
@@ -6,8 +7,8 @@ namespace Online_Medicine_Donation.ViewModel
     {
         public List<RequestVM> DonationRequests { get; set; }
         public List<RequestVM> EmergencyRequests { get; set; }
+        public List<RequestVM> WithdrawRequests { get; set; }
 
-        public List<UserProfileVM> DonorList { get; set; }
     }
 }
  
