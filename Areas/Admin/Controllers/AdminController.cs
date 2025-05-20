@@ -14,9 +14,10 @@ using Online_Medicine_Donation.DataModel.Online_Medicine_Donation.Models;
 
 namespace Online_Medicine_Donation.Areas.Admin.Controllers
 {
-   
+
+    [Authorize(Roles = "Admin")]
     [Area("Admin"), Route("Admin")]
-    //[Authorize(Roles = "Admin")]
+   
     public class AdminController : BaseController
 
     {
@@ -188,6 +189,15 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             return View(viewModel);
         }
 
-        
+        [HttpGet]
+        [Route("WithdrawHistory")]
+        public IActionResult WithdrawHistory(Guid id)
+        {
+
+            var withdraw = _context.WithdrawRequests.Where(x => x.NgoId != id).ToList();
+
+            return View(withdraw);
+        }
+
     }
 }

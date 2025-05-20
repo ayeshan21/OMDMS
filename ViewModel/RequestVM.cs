@@ -8,7 +8,8 @@ namespace Online_Medicine_Donation.ViewModel
          public DonationRequest donationRequest { get; set; }
          public EmergencyRequest emergencyRequest { get; set; }
 
-         public UserProfile userProfile { get; set; }
+        public UserProfile userProfile { get; set; }
+
 
         public List<UserProfile> NgoList { get; set; }
 

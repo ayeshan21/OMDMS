@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Online_Medicine_Donation.Controllers;
@@ -11,6 +12,7 @@ using System.Security.Claims;
 
 namespace Online_Medicine_Donation.Areas.Admin.Controllers
 {
+    [Authorize(Roles = "Donor")]
     [Area("Admin"), Route("Donor")]
     public class DonorController : BaseController
     {
@@ -206,6 +208,16 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                 _context.SaveChanges();
             }
             return RedirectToAction("Tables", "Admin");
+        }
+
+        [HttpGet]
+        [Route("NgoWithdrawHistory")]
+        public IActionResult NgoWithdrawHistory(Guid id)
+        {
+
+            var withdraw = _context.WithdrawRequests.Where(x => x.NgoId != id).ToList();
+
+            return View(withdraw);
         }
 
     }
