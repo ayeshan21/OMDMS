@@ -94,7 +94,6 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
         public IActionResult MedicineStock()
         {
             var request = _context.DonationRequests.Where(d => d.Status == "Accepted").ToList();
-
             if (request != null)
             { 
                 foreach( var item in request)
@@ -179,6 +178,16 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             _context.WithdrawRequests.Add(withdraw);
             _context.SaveChanges();
             return RedirectToAction("MedicineStock");
+        }
+
+        [HttpGet]
+        [Route("WithdrawHistory")]
+        public IActionResult WithdrawHistory(Guid id)
+        {
+
+            var withdraw = _context.WithdrawRequests.Where(x=>x.NgoId != id).ToList();
+            
+            return View(withdraw);
         }
     }
 }

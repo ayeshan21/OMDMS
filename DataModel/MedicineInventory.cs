@@ -43,6 +43,11 @@ namespace Online_Medicine_Donation.DataModel
         [StringLength(30)]
         public string? Condition { get; set; }
 
+        [Required]
+        [Display(Name = "Select NGO")]
+        [StringLength(30)]
+        public string? SelectNgo { get; set; }
+
         public string? Status { get; set; }
 
         [Required]

@@ -1,0 +1,34 @@
+﻿@model IEnumerable<Online_Medicine_Donation.DataModel.WithdrawRequest>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Withdraw History";
+}
+<div class="card shadow mb-4">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Ngo Name</th>
+                        <th>Medicine Name</th>
+                        <th>Quantity</th>
+                        <th>Withdraw Time</th>
+                        <th>Purpose</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.NgoName</td>
+                            <td>@item.MedicineName</td>
+                            <td>@item.Quantity</td>
+                            <td>@item.WithdrawTime.GetValueOrDefault().ToShortDateString()</td>
+                            <td>@item.Purpose</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
