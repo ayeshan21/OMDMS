@@ -2,12 +2,16 @@
 
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+    ViewData["Title"] = "Request Tables";
 }
+
+<link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.css">
+
 <h1 class="text-center">Donation Request</h1>
 <div class="card shadow mb-4">
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table table-bordered" id="donationRequestTable">
                 <thead>
                     <tr>
                         <th>Medicine Name</th>
@@ -61,11 +65,13 @@
     </div>
 </div>
 
+<link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.css">
+
 <h1 class="text-center">Emergency Request</h1>
 <div class="card shadow mb-4">
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table table-bordered" id="emergencyRequestTable">
                 <thead>
                     <tr>
                         <th>NGO Name</th>
@@ -117,3 +123,15 @@
         </div>
     </div>
 </div>
+
+@section Scripts
+{
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdn.datatables.net/2.3.1/js/dataTables.js"></script>
+    <script>
+        new DataTable('#donationRequestTable');
+    </script>
+    <script>
+        new DataTable('#emergencyRequestTable');
+    </script>
+}

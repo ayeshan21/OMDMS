@@ -1,12 +1,14 @@
-﻿@model Online_Medicine_Donation.ViewModel.CombinedRequestVM 
+﻿@model Online_Medicine_Donation.ViewModel.CombinedRequestVM
 @{
-    Layout="~/Views/Shared/_AdminLayout.cshtml";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewData["Title"] = "Donated Medicine";
 }
+<link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.css">
+
 <div class="card shadow mb-4">
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table table-bordered" id="donatedMedicine">
                 <thead>
                     <tr>
                         <th>Medicine Name</th>
@@ -22,15 +24,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if(Model.DonationRequests != null)
+                    @if (Model.DonationRequests != null)
                     { @foreach (var item in Model.DonationRequests)
                         {
-                         var expiry = item.ExpiryDate.GetValueOrDefault();
+                            var expiry = item.ExpiryDate.GetValueOrDefault();
                             var isExpired = expiry < DateTime.Now;
                             var daysLeft = (expiry - DateTime.Now).TotalDays;
                             var isExpiringSoon = daysLeft <= 7 && !isExpired;
 
-                           
+
 
                             // Apply background color based on expiry condition
                             //var rowClass = isExpired ? "" : isExpiringSoon ? "bg-danger text-black" : "";
@@ -50,27 +52,37 @@
                                 rowClass = "";
                             }
 
-                            
-                                <tr class="@rowClass">
-                                    <td>@item.Name</td>
-                                    <td>@item.Quantity</td>
-                                    <td>@item.Type</td>
-                                    <td>@item.Condition</td>
-                                    <td>@expiry.ToShortDateString()</td>
-                                    <td>@item.FullName</td>
-                                    <td>@item.Address</td>
-                                    <td>@item.PhoneNumber</td>
-                                    <td>@item.DonationTime</td>
-                                    <td>@item.Status</td>
-                                </tr>
-                            
+
+                            <tr class="@rowClass">
+                                <td>@item.Name</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.Type</td>
+                                <td>@item.Condition</td>
+                                <td>@expiry.ToShortDateString()</td>
+                                <td>@item.FullName</td>
+                                <td>@item.Address</td>
+                                <td>@item.PhoneNumber</td>
+                                <td>@item.DonationTime</td>
+                                <td>@item.Status</td>
+                            </tr>
+
 
                         }
-                        
+
                     }
-                   
+
                 </tbody>
             </table>
         </div>
     </div>
 </div>
+
+
+@section Scripts
+{
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdn.datatables.net/2.3.1/js/dataTables.js"></script>
+    <script>
+        new DataTable('#donatedMedicine');
+    </script>
+}

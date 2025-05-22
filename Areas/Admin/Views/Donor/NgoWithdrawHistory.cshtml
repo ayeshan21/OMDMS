@@ -1,13 +1,14 @@
 ﻿@model IEnumerable<Online_Medicine_Donation.DataModel.WithdrawRequest>
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
-    ViewData["Title"] = "Withdraw History";
+    ViewData["Title"] = "NGO's Withdraw History";
 }
-<h1>NGO Withdraw History</h1>
+<link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.css">
+
 <div class="card shadow mb-4">
     <div class="card-body">
         <div class="table-responsive">
-            <table class="table table-bordered">
+            <table class="table table-bordered" id="ngoWithdrawHistory">
                 <thead>
                     <tr>
                         <th>Ngo Name</th>
@@ -33,4 +34,13 @@
         </div>
     </div>
 </div>
+@section Scripts
+{
+    <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+    <script src="https://cdn.datatables.net/2.3.1/js/dataTables.js"></script>
+    <script>
+        new DataTable('#ngoWithdrawHistory');
+    </script>
+}
 
+                             
