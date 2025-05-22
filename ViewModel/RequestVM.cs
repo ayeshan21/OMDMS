@@ -9,9 +9,9 @@ namespace Online_Medicine_Donation.ViewModel
          public EmergencyRequest emergencyRequest { get; set; }
 
         public UserProfile userProfile { get; set; }
-
-
         public List<UserProfile> NgoList { get; set; }
+
+        public MedicineInventory medicineInventories { get; set; }
 
         public WithdrawRequest withdrawRequest { get; set; }
 
@@ -26,7 +26,6 @@ namespace Online_Medicine_Donation.ViewModel
         public string? Condition { get; set; }
         public DateTime? ExpiryDate { get; set; }
         public string? Status { get; set; }
-
         public IFormFile? PhotoFile { get; set; }
 
     }

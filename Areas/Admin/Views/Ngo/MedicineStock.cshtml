@@ -1,4 +1,4 @@
-﻿@model Online_Medicine_Donation.ViewModel.CombinedRequestVM
+﻿@model IEnumerable<Online_Medicine_Donation.ViewModel.MedicineInventoryVM>
 
 @{
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
@@ -11,35 +11,35 @@
             <table class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Medicine Name</th>
+                        <th>Medicine Name</th> 
                         <th>Quantity</th>
                         <th>Medicine Type</th>
-                        <th>Donor Name</th>
+                        <th>Donor Name</th> 
                         <th>Donor Address</th>
                         <th>Donor Contact</th>
-                        <th>Donation Time</th>
+                        <th>Donation Time</th> 
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                   
-                        @foreach (var item in Model.DonationRequests)
+
+                    @foreach (var item in Model)
                         {
                             <tr>
-                                <td>@item.donationRequest.Name</td>
-                                <td>@item.donationRequest.Quantity</td>
-                                <td>@item.donationRequest.Type</td>
-                                <td>@item.userProfile?.FullName</td>
-                                <td>@item.userProfile?.Address</td>
-                                <td>@item.userProfile?.PhoneNumber</td>
-                                <td>@item.donationRequest.DonationTime</td>
+                                <td>@item.Name</td>
+                                <td>@item.Quantity</td>
+                                <td>@item.Type</td>
+                                <td>@item.FullName</td>
+                                <td>@item.Address</td>
+                                <td>@item.PhoneNumber</td>
+                                <td>@item.DonationTime</td>
                                 <td>
 
                                     <button type="button" class="btn btn-sm bg-primary text-white"
                                             data-bs-toggle="modal"
                                             data-bs-target="#staticBackdrop"
-                                            data-medicine-name="@item.donationRequest.Name"
-                                            data-ngo-name="@item.donationRequest.SelectNgo">
+                                            data-medicine-name="@item.Name"
+                                            data-ngo-name="@item.SelectNgo">
                                          
                                         Withdraw
                                     </button>
@@ -100,6 +100,10 @@
 </div>
 
 @section Scripts {
+    <script>
+
+
+    </script>
     <script>
         $(document).ready(function () {
             // When the modal is shown, populate fields based on the medicine data

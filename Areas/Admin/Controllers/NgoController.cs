@@ -8,6 +8,7 @@ using Online_Medicine_Donation.DataModel;
 using Online_Medicine_Donation.DataModel.Online_Medicine_Donation.Models;
 using Online_Medicine_Donation.ViewModel;
 using System.Linq;
+using System.Net;
 using System.Security.Claims;
 
 namespace Online_Medicine_Donation.Areas.Admin.Controllers
@@ -17,6 +18,9 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
     public class NgoController : BaseController
     {
         private Guid currUserGuid => Guid.TryParse(User.FindFirstValue(ClaimTypes.NameIdentifier), out var userGuid) ? userGuid : Guid.Empty;
+
+        public IEnumerable<MedicineInventory> MedicineInventorys { get; private set; }
+
         private readonly OnlineMedicineContext _context;
 
         private readonly UserManager<IdentityUser> _userManager;
@@ -91,18 +95,20 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
         }
 
+        
         [Route("MedicineStock")]
         public IActionResult MedicineStock()
         {
-            var request = _context.DonationRequests.Where(d => d.Status == "Accepted").ToList();
+            var datalist = new List<MedicineInventoryVM>();
+
+            var user = _context.UserProfiles.Where(x => x.UserId == currUserGuid).FirstOrDefault();
+
+            var request = _context.DonationRequests.Where(d => d.Status == "Accepted" && d.SelectNgo== user.FullName).ToList();
             if (request != null)
             {
                 foreach (var item in request)
                 {
-
-                    // Check if already exists to avoid duplicates
-                    bool alreadyExists = _context.MedicineInventories
-                        .Any(m => m.DonationRequestsId == item.Id); // Or match on name/expiry/etc if needed
+                    bool alreadyExists = _context.MedicineInventories.Any(m => m.DonationRequestsId == item.Id); 
 
                     if (!alreadyExists)
                     {
@@ -124,26 +130,33 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                         _context.MedicineInventories.Add(inventoryItem);
                         _context.SaveChanges();
                     }
-                }
-            }
-            var user = _context.UserProfiles.Where(x => x.UserId == currUserGuid).FirstOrDefault();
-            // Now safely create the view model regardless
-            var DonationRequests = _context.DonationRequests
-                .Where(x => x.Status == "Accepted" && x.SelectNgo == user.FullName)
-                .ToList();
 
-            var viewModel = new CombinedRequestVM
-            {
-                DonationRequests = DonationRequests.Select(d => new RequestVM
-                {
-                    donationRequest = d,
-                    userProfile = _context.UserProfiles.FirstOrDefault(u => u.UserId == d.DonationId)
+                    var donarinfo = _context.UserProfiles.Where(x => x.UserId == item.DonationId).FirstOrDefault();
+
+                    int quantity = (int) _context.MedicineInventories.Where(x => x.DonationRequestsId == item.Id).Select(x => x.Quantity).FirstOrDefault();
+
+                    var tempdata = new MedicineInventoryVM
+                    {
+                        Name = item.Name,
+                        Quantity = quantity,
+                        Type = item.Type,
+                        FullName = donarinfo?.FullName,
+                        Address = donarinfo?.Address,
+                        PhoneNumber = donarinfo?.PhoneNumber,
+                        DonationTime = item.DonationTime,
+                        SelectNgo = item.SelectNgo
+                    };
+
+                    datalist.Add(tempdata);
                     
+                }
 
-                }).ToList()
-            };
+                
 
-            return View(viewModel);
+
+            }
+
+            return View(datalist);
         }
 
         [HttpPost]
@@ -161,51 +174,71 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             return RedirectToAction("MedicineStock");
         }
 
-
         [HttpPost]
         [Route("Withdraw")]
+      
         public IActionResult Withdraw([FromForm] WithdrawRequestVM model)
         {
-            if (model == null)
+            if (model == null || model.Quantity == null || model.Quantity <= 0)
             {
-                return NotFound();
+                return BadRequest("Invalid withdrawal request.");
             }
 
             var user = currUserGuid;
-            var quantity = _context.WithdrawRequests.Where(x => x.NgoId == user).FirstOrDefault();
 
-            bool alreadyExists = _context.WithdrawRequests.Any(m => m.NgoId == user);
-            if(!alreadyExists)
+            // Step 1: Find the inventory item
+            var inventoryItem = _context.MedicineInventories
+                .FirstOrDefault(m => m.Name == model.MedicineName && m.SelectNgo == model.NgoName);
+
+            if (inventoryItem == null)
+            {
+                return NotFound("Medicine not found in inventory.");
+            }
+
+            // Step 2: Check if enough stock exists
+            if (inventoryItem.Quantity < model.Quantity)
+            {
+                return BadRequest("Insufficient stock.");
+            }
+
+            // Step 3: Deduct stock quantity
+            inventoryItem.Quantity -= model.Quantity.Value;
+
+            // Step 4: Save or update withdraw request
+            var existingRequest = _context.WithdrawRequests
+                .FirstOrDefault(x => x.NgoId == user && x.MedicineName == model.MedicineName);
+
+            if (existingRequest == null)
             {
                 var withdraw = new WithdrawRequest
                 {
-                    NgoId = currUserGuid,
+                    NgoId = user,
                     NgoName = model.NgoName,
                     MedicineName = model.MedicineName,
                     Quantity = model.Quantity,
                     WithdrawTime = model.WithdrawTime,
-                    Purpose = model.Purpose,
+                    Purpose = model.Purpose
                 };
+
                 _context.WithdrawRequests.Add(withdraw);
-                
             }
             else
             {
-                var existingRequest = _context.WithdrawRequests.Where(x => x.NgoId == user && x.MedicineName == model.MedicineName).FirstOrDefault();
+                existingRequest.Quantity += model.Quantity;
+                existingRequest.WithdrawTime = model.WithdrawTime;
+                existingRequest.Purpose = model.Purpose;
 
-                if (existingRequest != null)
-                {
-                    // Update existing request
-                    existingRequest.Quantity += model.Quantity;
-                    existingRequest.WithdrawTime = model.WithdrawTime;
-                    existingRequest.Purpose = model.Purpose;
-
-                }
                 _context.WithdrawRequests.Update(existingRequest);
             }
+
+            // Step 5: Save inventory changes
+            _context.MedicineInventories.Update(inventoryItem);
             _context.SaveChanges();
+
             return RedirectToAction("MedicineStock");
         }
+
+
     }
 }
 
