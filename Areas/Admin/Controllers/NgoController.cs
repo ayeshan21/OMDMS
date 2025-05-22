@@ -150,10 +150,6 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                     datalist.Add(tempdata);
                     
                 }
-
-                
-
-
             }
 
             return View(datalist);

@@ -17,7 +17,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
     [Authorize(Roles = "Admin")]
     [Area("Admin"), Route("Admin")]
-   
+
     public class AdminController : BaseController
 
     {
@@ -28,19 +28,47 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             _context = context;
             _userManager = userManager;
         }
+       
+        /* public IActionResult Dashboard()
+         {
+             var ngoCount = _context.UserProfiles.Where(x => x.Role == "NGO").Count();
+             var donorCount = _context.UserProfiles.Where(x => x.Role == "Donor").Count();
+             var medicineCount = _context.MedicineInventories.Count();
+
+             ViewBag.NgoCount = ngoCount;
+             ViewBag.DonorCount = donorCount;
+             ViewBag.MedicineCount = medicineCount;
+             return View();
+         }*/
+
         [Route("Dashboard")]
         public IActionResult Dashboard()
         {
-            var ngoCount = _context.UserProfiles.Where(x => x.Role == "NGO").Count();
-            var donorCount = _context.UserProfiles.Where(x => x.Role == "Donor").Count();
-            var medicineCount = _context.MedicineInventories.Count();
+            // Basic counts
+            ViewBag.NgoCount = _context.UserProfiles.Count(x => x.Role == "NGO");
+            ViewBag.DonorCount = _context.UserProfiles.Count(x => x.Role == "Donor");
+            ViewBag.MedicineCount = _context.MedicineInventories.Sum(x => x.Quantity);
+            ViewBag.DonationCount = _context.DonationRequests.Count();
 
-            ViewBag.NgoCount = ngoCount;
-            ViewBag.DonorCount = donorCount;
-            ViewBag.MedicineCount = medicineCount;
+            // Donation status stats for pie chart
+            ViewBag.DonationStatusStats = new
+            {
+                Pending = _context.DonationRequests.Count(x => x.Status == "Null"),
+                Completed = _context.DonationRequests.Count(x => x.Status == "Accepted"),
+                Rejected = _context.DonationRequests.Count(x => x.Status == "Rejected")
+            };
+
+            // User growth data (example data - replace with actual data if available)
+            ViewBag.UserGrowthData = new
+            {
+                Labels = new[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun" },
+                NGOs = new[] { 5, 10, 15, 20, 25, 30 },
+                Donors = new[] { 10, 20, 30, 40, 50, 60 }
+            };
+
             return View();
         }
-
+    
         [Route("NgoList")]
         public IActionResult NgoList()
         {
@@ -74,7 +102,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             {
                 donationRequest = new DonationRequest
                 {
-                    Id=m.Id,
+                    Id = m.Id,
                     DonationId = m.DonationId, // Use existing ID
                     Name = m.Name,
                     Quantity = m.Quantity,
@@ -87,7 +115,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             {
                 emergencyRequest = new EmergencyRequest
                 {
-                    Id=m.Id,
+                    Id = m.Id,
                     EmergencyId = m.EmergencyId, // Use existing ID
                     NgoName = m.NgoName,
                     MedicineName = m.MedicineName,
@@ -111,14 +139,14 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
         [Route("AcceptRequest")]
         public IActionResult AcceptRequest(int EmergencyId)
         {
-            var emergencyrequest = _context.EmergencyRequests.Where(x=>x.Id == EmergencyId).FirstOrDefault();
+            var emergencyrequest = _context.EmergencyRequests.Where(x => x.Id == EmergencyId).FirstOrDefault();
 
             if (emergencyrequest != null)
             {
                 emergencyrequest.Status = "Accepted";
                 _context.SaveChanges();
             }
-        
+
             return RedirectToAction("Tables");
         }
 
@@ -133,7 +161,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                 emergencyrequest.Status = "Rejected";
                 _context.SaveChanges();
             }
-          
+
             return RedirectToAction("Tables");
         }
 
@@ -143,12 +171,12 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
         public IActionResult MedicineDetails(int Id)
         {
             var donation = _context.DonationRequests.FirstOrDefault(d => d.Id == Id);
-            var specificDonor = _context.UserProfiles.FirstOrDefault(u => u.Role == "Donor"); 
+            var specificDonor = _context.UserProfiles.FirstOrDefault(u => u.Role == "Donor");
 
 
             if (donation == null)
             {
-                return NotFound(); 
+                return NotFound();
             }
 
             var viewModel = new RequestVM
@@ -157,28 +185,28 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                 userProfile = specificDonor
             };
 
-            return View(viewModel); 
+            return View(viewModel);
         }
 
         [Route("DonatedMedicine")]
-       
+
         public IActionResult DonatedMedicine()
         {
-            var medicineList = (from donation in _context.DonationRequests    
+            var medicineList = (from donation in _context.DonationRequests
                                 join userProfile in _context.UserProfiles
                                     on donation.DonationId equals userProfile.UserId
                                 select new RequestVM
                                 {
-                                        Name = donation.Name,
-                                        Quantity = donation.Quantity,
-                                        Type = donation.Type,
-                                        Condition = donation.Condition,
-                                        ExpiryDate = donation.ExpiryDate,
-                                        DonationTime = donation.DonationTime,
-                                        FullName = userProfile.FullName,
-                                        Address = userProfile.Address,
-                                        PhoneNumber = userProfile.PhoneNumber,
-                                        Status = donation.Status   
+                                    Name = donation.Name,
+                                    Quantity = donation.Quantity,
+                                    Type = donation.Type,
+                                    Condition = donation.Condition,
+                                    ExpiryDate = donation.ExpiryDate,
+                                    DonationTime = donation.DonationTime,
+                                    FullName = userProfile.FullName,
+                                    Address = userProfile.Address,
+                                    PhoneNumber = userProfile.PhoneNumber,
+                                    Status = donation.Status
                                 }).ToList();
 
             var viewModel = new CombinedRequestVM

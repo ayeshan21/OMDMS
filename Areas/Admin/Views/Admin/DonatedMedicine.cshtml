@@ -32,11 +32,6 @@
                             var daysLeft = (expiry - DateTime.Now).TotalDays;
                             var isExpiringSoon = daysLeft <= 7 && !isExpired;
 
-
-
-                            // Apply background color based on expiry condition
-                            //var rowClass = isExpired ? "" : isExpiringSoon ? "bg-danger text-black" : "";
-
                             var rowClass = "";
 
                             if (isExpired)
@@ -63,7 +58,25 @@
                                 <td>@item.Address</td>
                                 <td>@item.PhoneNumber</td>
                                 <td>@item.DonationTime</td>
-                                <td>@item.Status</td>
+                                <td>
+                                    @if (string.IsNullOrWhiteSpace(item.Status))
+                                    {
+                                        <span class="btn btn-sm disabled bg-warning text-white">Pending</span>
+
+                                    }
+                                    else if (item.Status == "Accepted")
+                                    {
+                                        <span class="btn btn-sm disabled bg-success text-white">Accepted</span>
+                                    }
+                                    else
+                                    {
+                                        if (item.Status == "Rejected")
+                                        {
+                                            <span class="btn btn-sm disabled bg-danger text-white">Rejected</span>
+                                        }
+                                    }
+                                </td>
+                               
                             </tr>
 
 
