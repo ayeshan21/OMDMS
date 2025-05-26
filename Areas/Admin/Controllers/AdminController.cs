@@ -11,6 +11,7 @@ using Online_Medicine_Donation.DataModel;
 using System.Net.Mail;
 using System.Net;
 using Online_Medicine_Donation.DataModel.Online_Medicine_Donation.Models;
+using static iTextSharp.text.pdf.AcroFields;
 
 namespace Online_Medicine_Donation.Areas.Admin.Controllers
 {
@@ -28,18 +29,6 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             _context = context;
             _userManager = userManager;
         }
-       
-        /* public IActionResult Dashboard()
-         {
-             var ngoCount = _context.UserProfiles.Where(x => x.Role == "NGO").Count();
-             var donorCount = _context.UserProfiles.Where(x => x.Role == "Donor").Count();
-             var medicineCount = _context.MedicineInventories.Count();
-
-             ViewBag.NgoCount = ngoCount;
-             ViewBag.DonorCount = donorCount;
-             ViewBag.MedicineCount = medicineCount;
-             return View();
-         }*/
 
         [Route("Dashboard")]
         public IActionResult Dashboard()
@@ -58,13 +47,28 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                 Rejected = _context.DonationRequests.Count(x => x.Status == "Rejected")
             };
 
-            // User growth data (example data - replace with actual data if available)
+            var currentYear = DateTime.Now.Year;
+
+            // Actual user growth data
             ViewBag.UserGrowthData = new
             {
-                Labels = new[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun" },
-                NGOs = new[] { 5, 10, 15, 20, 25, 30 },
-                Donors = new[] { 10, 20, 30, 40, 50, 60 }
+                // Month labels
+                Labels = new[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" },
+                NGOs = Enumerable.Range(1, 12)
+            .Select(month => _context.UserProfiles
+                .Count(u => u.Role == "NGO" &&
+                       u.CreatedDate.Month == month &&
+                       u.CreatedDate.Year == currentYear))
+            .ToArray(),
+                // Actual donor signups per month
+                Donors = Enumerable.Range(1, 12)
+            .Select(month => _context.UserProfiles
+                .Count(u => u.Role == "Donor" &&
+                       u.CreatedDate.Month == month &&
+                       u.CreatedDate.Year == currentYear))
+            .ToArray()
             };
+
 
             return View();
         }
@@ -80,7 +84,8 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
         public IActionResult DonorList()
         {
             var DonorProfiles = _context.UserProfiles.Where(x => x.Role == "Donor").ToList();
-
+            var donationCounts = _context.DonationRequests.GroupBy(d => d.DonationId).ToDictionary(g => g.Key, g => g.Count());
+            ViewBag.DonationCounts = donationCounts;
             return View(DonorProfiles);
         }
         [Route("UserList")]
@@ -192,7 +197,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
         public IActionResult DonatedMedicine()
         {
-            var medicineList = (from donation in _context.DonationRequests
+            var medicineList = (from donation in _context.DonationRequests.Where(x=> x.Status == "Accepted")
                                 join userProfile in _context.UserProfiles
                                     on donation.DonationId equals userProfile.UserId
                                 select new RequestVM

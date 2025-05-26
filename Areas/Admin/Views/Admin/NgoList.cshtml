@@ -16,7 +16,7 @@
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Address</th>
-                        <th>Actions</th>
+                        <th>Ngo License No.</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -27,11 +27,7 @@
                             <td>@Html.DisplayFor(modelItem => item.Email)</td>
                             <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
                             <td>@Html.DisplayFor(modelItem => item.Address)</td>
-
-                            <td>
-                                <a asp-action="Edit" asp-route-id="@item.UserProfileId" class="btn btn-sm btn-primary">Active</a>
-                                <a asp-action="Delete" asp-route-id="@item.UserProfileId" class="btn btn-sm btn-danger">Deactive</a>
-                            </td>
+                            <td>@Html.DisplayFor(modelItem => item.NgoCode)</td>
                         </tr>
                     }
                 </tbody>

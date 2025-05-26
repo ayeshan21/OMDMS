@@ -6,6 +6,8 @@
 
 <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.css">
 
+ 
+
 <div class="card shadow mb-4">
     <div class="card-body">
         <div class="table-responsive">
@@ -16,22 +18,22 @@
                         <th>Email</th>
                         <th>Phone</th>
                         <th>Address</th>
-                        <th>Actions</th>
+                        <th>Times of Donation</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
+                         
                         <tr>
                             <td>@Html.DisplayFor(modelItem => item.FullName)</td>
                             <td>@Html.DisplayFor(modelItem => item.Email)</td>
                             <td>@Html.DisplayFor(modelItem => item.PhoneNumber)</td>
                             <td>@Html.DisplayFor(modelItem => item.Address)</td>
-                            
                             <td>
-                                <a asp-action="Edit" asp-route-id="@item.UserProfileId" class="btn btn-sm btn-primary">Active</a>
-                                <a asp-action="Delete" asp-route-id="@item.UserProfileId" class="btn btn-sm btn-danger">Deactive</a>
+                                @(ViewBag.DonationCounts.ContainsKey(item.UserId) ? ViewBag.DonationCounts[item.UserId] : 0)
                             </td>
+
                         </tr>
                     }
                 </tbody>
