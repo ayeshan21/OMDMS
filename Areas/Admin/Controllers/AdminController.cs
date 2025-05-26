@@ -42,11 +42,13 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             // Donation status stats for pie chart
             ViewBag.DonationStatusStats = new
             {
-                Pending = _context.DonationRequests.Count(x => x.Status == "Null"),
-                Completed = _context.DonationRequests.Count(x => x.Status == "Accepted"),
-                Rejected = _context.DonationRequests.Count(x => x.Status == "Rejected")
+                 Pending = _context.DonationRequests.Count(x => x.Status == "Null"),
+                 Completed = _context.DonationRequests.Count(x => x.Status == "Accepted"),
+                 Rejected = _context.DonationRequests.Count(x => x.Status == "Rejected")  
             };
 
+        
+           
             var currentYear = DateTime.Now.Year;
 
             // Actual user growth data
@@ -140,6 +142,36 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
 
             return View(viewModel);
         }
+
+        [HttpPost]
+        [Route("AcceptDonationRequest")]
+        public IActionResult AcceptDonationRequest(int Id)
+        {
+            var donationrequest = _context.DonationRequests.Where(x => x.Id == Id).FirstOrDefault();
+
+
+            if (donationrequest != null)
+            {
+                donationrequest.Status = "Accepted";
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Tables", "Admin");
+        }
+
+        [Route("RejectDonationRequest")]
+        [HttpPost]
+        public IActionResult RejecDonationtRequest(int Id)
+        {
+            var donationrequest = _context.DonationRequests.Where(x => x.Id == Id).FirstOrDefault();
+
+            if (donationrequest != null)
+            {
+                donationrequest.Status = "Rejected";
+                _context.SaveChanges();
+            }
+            return RedirectToAction("Tables", "Admin");
+        }
+
         [HttpPost]
         [Route("AcceptRequest")]
         public IActionResult AcceptRequest(int EmergencyId)

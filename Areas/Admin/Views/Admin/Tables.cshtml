@@ -40,12 +40,12 @@
                                 }
                                 else
                                 {
-                                    <form action="/Donor/AcceptRequest" method="post" style="display:inline;">
+                                    <form action="/Admin/AcceptDonationRequest" method="post" style="display:inline;">
                                         <input type="hidden" name="Id" value="@item.donationRequest.Id" />
                                         <input type="submit" class="btn btn-sm btn-success" value="Accept" />
                                     </form>
 
-                                    <form action="/Donor/RejectRequest" method="post" style="display:inline;">
+                                    <form action="/Admin/RejectDonationRequest" method="post" style="display:inline;">
                                         <input type="hidden" name="Id" value="@item.donationRequest.Id" />
                                         <input type="submit" class="btn btn-sm btn-danger" value="Reject" />
                                     </form>

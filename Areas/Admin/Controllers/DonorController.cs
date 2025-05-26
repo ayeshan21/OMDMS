@@ -181,35 +181,6 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
           
         }
 
-        [HttpPost]
-        [Route("AcceptRequest")]
-        public IActionResult AcceptRequest(int Id)
-        {
-            var donationrequest = _context.DonationRequests.Where(x => x.Id == Id).FirstOrDefault();
-
-          
-            if (donationrequest != null)
-            {
-                donationrequest.Status = "Accepted";
-                _context.SaveChanges();
-            }
-            return RedirectToAction("Tables", "Admin");
-        }
-
-        [Route("RejectRequest")]
-        [HttpPost]
-        public IActionResult RejectRequest(int Id)
-        {
-            var donationrequest = _context.DonationRequests.Where(x => x.Id == Id).FirstOrDefault();
-
-            if (donationrequest != null)
-            {
-                donationrequest.Status = "Rejected";
-                _context.SaveChanges();
-            }
-            return RedirectToAction("Tables", "Admin");
-        }
-
         [HttpGet]
         [Route("NgoWithdrawHistory")]
         public IActionResult NgoWithdrawHistory(Guid id)

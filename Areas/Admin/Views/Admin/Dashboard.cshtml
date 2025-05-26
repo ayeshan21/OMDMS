@@ -2,239 +2,6 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewData["Title"] = "Dashboard";
 }
- 
-@* <div class="row">
-    <div class="col-md-4 stretch-card grid-margin">
-        <div class="card bg-gradient-danger card-img-holder text-white">
-            <div class="card-body">
-                <img src="assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                <h4 class="font-weight-normal mb-3">
-                    Total NGO <i class="fa-classic fa-solid fa-clipboard-list fa-fw float-end"></i>
-                </h4>
-                <h2 class="mb-5">@ViewBag.NgoCount</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 stretch-card grid-margin">
-        <div class="card bg-gradient-info card-img-holder text-white">
-            <div class="card-body">
-                <img src="assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                <h4 class="font-weight-normal mb-3">
-                    Total Donor <i class="fa-classic fa-solid fa-clipboard-list fa-fw float-end"></i>
-                </h4>
-                <h2 class="mb-5">@ViewBag.DonorCount</h2>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-4 stretch-card grid-margin">
-        <div class="card bg-gradient-success card-img-holder text-white">
-            <div class="card-body">
-                <img src="assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                <h4 class="font-weight-normal mb-3">
-                    Total Medicine <i class="fa-solid fa-pills float-end"></i>
-                </h4>
-                <h2 class="mb-5">@ViewBag.MedicineCount</h2>
-            </div>
-        </div>
-    </div>
-</div> *@
-
-
-@* <div class="row">
-    <!-- First Row: Key Metrics -->
-    <div class="col-md-3 stretch-card grid-margin">
-        <div class="card bg-gradient-danger card-img-holder text-white">
-            <div class="card-body">
-                <img src="assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                <h4 class="font-weight-normal mb-3">
-                    Total NGOs <i class="fas fa-hands-helping float-end"></i>
-                </h4>
-                <h2 class="mb-5">@ViewBag.NgoCount</h2>
-                <h6 class="card-text">@ViewBag.ActiveNgoCount Active</h6>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 stretch-card grid-margin">
-        <div class="card bg-gradient-info card-img-holder text-white">
-            <div class="card-body">
-                <img src="assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                <h4 class="font-weight-normal mb-3">
-                    Total Donors <i class="fas fa-hand-holding-heart float-end"></i>
-                </h4>
-                <h2 class="mb-5">@ViewBag.DonorCount</h2>
-                <h6 class="card-text">@ViewBag.RecentDonors Recent</h6>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 stretch-card grid-margin">
-        <div class="card bg-gradient-success card-img-holder text-white">
-            <div class="card-body">
-                <img src="assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                <h4 class="font-weight-normal mb-3">
-                    Total Medicines <i class="fas fa-pills float-end"></i>
-                </h4>
-                <h2 class="mb-5">@ViewBag.MedicineCount</h2>
-                <h6 class="card-text">@ViewBag.ExpiringSoon Expiring Soon</h6>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-3 stretch-card grid-margin">
-        <div class="card bg-gradient-warning card-img-holder text-white">
-            <div class="card-body">
-                <img src="assets/images/dashboard/circle.svg" class="card-img-absolute" alt="circle-image" />
-                <h4 class="font-weight-normal mb-3">
-                    Total Donations <i class="fas fa-donate float-end"></i>
-                </h4>
-                <h2 class="mb-5">@ViewBag.DonationCount</h2>
-                <h6 class="card-text">@ViewBag.PendingDonations Pending</h6>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <!-- Second Row: Charts -->
-    <div class="col-md-6 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Medicine Donations</h4>
-                <canvas id="donationChart" height="250"></canvas>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">User Growth</h4>
-                <canvas id="userGrowthChart" height="250"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <!-- Third Row: Recent Activity -->
-    <div class="col-md-6 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Recent Donations</h4>
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Donor</th>
-                                <th>Medicine</th>
-                                <th>Quantity</th>
-                                <th>Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var donation in ViewBag.RecentDonations)
-                            {
-                                <tr>
-                                    <td>@donation.DonorName</td>
-                                    <td>@donation.MedicineName</td>
-                                    <td>@donation.Quantity</td>
-                                    <td><label class="badge badge-@donation.StatusBadge">@donation.Status</label></td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-6 grid-margin stretch-card">
-        <div class="card">
-            <div class="card-body">
-                <h4 class="card-title">Expiring Soon</h4>
-                <div class="table-responsive">
-                    <table class="table table-hover">
-                        <thead>
-                            <tr>
-                                <th>Medicine</th>
-                                <th>Expiry Date</th>
-                                <th>Quantity</th>
-                                <th>Days Left</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var medicine in ViewBag.ExpiringMedicines)
-                            {
-                                <tr>
-                                    <td>@medicine.Name</td>
-                                    <td>@medicine.ExpiryDate.ToString("d")</td>
-                                    <td>@medicine.Quantity</td>
-                                    <td><label class="badge badge-@medicine.ExpiryBadge">@medicine.DaysLeft days</label></td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-@section Scripts {
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Donation Chart
-       
-            var statusCtx = document.getElementById('statusChart').getContext('2d');
-        var statusChart = new Chart(statusCtx, {
-            type: 'pie',
-            data: {
-                labels: ['Pending', 'Completed', 'Rejected'],
-                datasets: [{
-                    data: [@ViewBag.DonationStatusStats.Pending,
-        @ViewBag.DonationStatusStats.Completed,
-        @ViewBag.DonationStatusStats.Rejected],
-                    backgroundColor: [
-                        'rgba(255, 206, 86, 0.7)',
-                        'rgba(75, 192, 192, 0.7)',
-                        'rgba(255, 99, 132, 0.7)'
-                    ]
-                }]
-            }
-        });
-    
-
-        // User Growth Chart
-        var userGrowthCtx = document.getElementById('userGrowthChart').getContext('2d');
-        var userGrowthChart = new Chart(userGrowthCtx, {
-            type: 'line',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [
-                    {
-                        label: 'NGOs',
-                        data: @Json.Serialize(ViewBag.MonthlyNgos),
-                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        borderWidth: 2,
-                        tension: 0.1
-                    },
-                    {
-                        label: 'Donors',
-                        data: @Json.Serialize(ViewBag.MonthlyDonors),
-                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                        borderColor: 'rgba(75, 192, 192, 1)',
-                        borderWidth: 2,
-                        tension: 0.1
-                    }
-                ]
-            },
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
-                    }
-                }
-            }
-        });
-    </script>
-} *@
 
 <div class="row mb-4">
     <!-- Summary Cards -->
@@ -289,11 +56,12 @@
     <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Donation Status</h4>
+                <h4 class="card-title">Donation Request Status</h4>
                 <canvas id="statusPieChart" height="250"></canvas>
             </div>
         </div>
     </div>
+
     <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
@@ -309,7 +77,7 @@
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // Status Pie Chart
+        // Status Pie Chart for donation
         var statusCtx = document.getElementById('statusPieChart').getContext('2d');
         var statusPieChart = new Chart(statusCtx, {
             type: 'pie',
