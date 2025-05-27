@@ -118,8 +118,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                     Status = m.Status
                 }
             }).ToList();
-
-              
+     
               var emergencyrequest = _context.EmergencyRequests.Select(m => new RequestVM
               {
                   emergencyRequest = new EmergencyRequest
@@ -175,8 +174,8 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
         }
 
         [HttpPost]
-        [Route("AcceptRequest")]
-        public IActionResult AcceptRequest(int EmergencyId)
+        [Route("AcceptEmergencyRequest")]
+        public IActionResult AcceptEmergencyRequest(int EmergencyId)
         {
             var emergencyrequest = _context.EmergencyRequests.Where(x => x.Id == EmergencyId).FirstOrDefault();
 
@@ -189,9 +188,9 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             return RedirectToAction("Tables");
         }
 
-        [Route("RejectRequest")]
+        [Route("RejectEmergencyRequest")]
         [HttpPost]
-        public IActionResult RejectRequest(int EmergencyId)
+        public IActionResult RejectEmergencyRequest(int EmergencyId)
         {
             var emergencyrequest = _context.EmergencyRequests.Where(x => x.Id == EmergencyId).FirstOrDefault();
 

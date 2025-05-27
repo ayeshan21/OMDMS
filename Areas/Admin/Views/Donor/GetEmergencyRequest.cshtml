@@ -30,10 +30,8 @@
                             <td>@item.emergencyRequest.Type</td>
                             <td>@item.emergencyRequest.Reason</td>
                             <td>@item.emergencyRequest.Days</td>
-
                             <td> 
-@*                               <a href="/Donor/DonationRequest" name="Id" class="btn btn-sm btn-success">Donate Now!</a>
- *@                                <form action="/Donor/DonationRequest" method="get" style="display:inline;">
+                                 <form action="/Donor/DonationRequest" method="get" style="display:inline;">
                                     <input type="hidden" name="Id" value="@item.emergencyRequest.Id" />
                                     <input type="submit" class="btn btn-sm btn-success" value="Donate Now!" />
                                 </form> 

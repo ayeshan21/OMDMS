@@ -4,6 +4,14 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewData["Title"] = "Medicine Stock";
 }
+
+<style>
+    .error-message {
+        color: red;
+        font-size: 0.875em;
+    }
+</style>
+
 <link rel="stylesheet" href="https://cdn.datatables.net/2.3.1/css/dataTables.dataTables.css">
 
 <div class="card shadow mb-4">
@@ -88,6 +96,7 @@
                     <div class="form-group">
                         <label for="Purpose" class="control-label">Withdraw purpose <span style="color:red">*</span></label>
                         <input name="Purpose" class="form-control" type="text" id="purpose" required />
+                        <div id="purposeError" class="error-message"></div>
                         <span class="text-danger field-validation-valid" data-valmsg-for="Purpose"></span>
                     </div>
                 </div>
@@ -110,19 +119,25 @@
 
     <script>
         $(document).ready(function () {
+            $("#purpose").on("input", function () {
+                let value = $(this).val();
+                if (/[^a-zA-Z]/.test(value)) {
+                    $("#purposeError").text("Only letters are allowed.");
+                } else {
+                    $("#purposeError").text("");
+                }
+            });
+
             // When the modal is shown, populate fields based on the medicine data
             $('#staticBackdrop').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
                 var medicineName = button.data('medicine-name');
                 var ngoName = button.data('ngo-name');
-               
-            
-
+           
                 // Set values in the modal form
            
                 $('#medName').val(medicineName);
                 $('#ngoName').val(ngoName);
-
 
                 // Set current date as default withdraw date
                 var today = new Date();

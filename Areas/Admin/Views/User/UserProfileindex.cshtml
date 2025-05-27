@@ -3,18 +3,26 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewData["Title"] = "Create Profile";
 }
-
+<style>
+    .error-message {
+        color: red;
+        font-size: 15px;
+        margin-top: 2px;
+    }
+</style>
 <form id="userProfileForm" method="post" enctype="multipart/form-data">
     <div class="p-4 bg-light">
         <div class="form-group">
             <label asp-for="FullName" class="control-label">Full Name <span style="color:red">*</span></label>
             <input asp-for="FullName" class="form-control" id="fullname" />
+            <div id="fullNameError" class="error-message"></div>
             <span asp-validation-for="FullName" class="text-danger"></span>
         </div>
 
         <div class="form-group">
             <label asp-for="Email" class="control-label">Email <span style="color:red">*</span></label>
             <input asp-for="Email" class="form-control" type="email" id="email" />
+            <div id="emailError" class="error-message"></div>
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
 
@@ -37,7 +45,8 @@
         </div>
         <div class="form-group">
             <label asp-for="Role" class="control-label">I am interested to be: <span style="color:red">*</span></label>
-            <select asp-for="Role" class="form-control" id="role">
+            <select asp-for="Role" class="form-control" id="role" style="color:black">
+                <option value="Select">-Select Role-</option>
                 <option value="Donor">Donor</option>
                 <option value="NGO">NGO</option>
             </select>
@@ -47,14 +56,14 @@
         <div class="form-group">
             <label asp-for="ProfilePictureUrl" class="control-label">Profile Picture <span style="color:red">*</span></label>
             <input type="file" asp-for="ProfilePictureFile" class="form-control-file" id="picture" />
+            <div id="photoFileError" class="error-message"></div>
             <span asp-validation-for="ProfilePictureUrl" class="text-danger"></span>
-        </div>  
+        </div>
         <div class="form-group d-flex justify-content-between">
             <input type="submit" value="Save Profile" class="btn btn-success" id="save_profile" />
         </div>
     </div>
 </form>
-
 
 @section Scripts {
 
@@ -65,6 +74,54 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function () {
+
+            $("#email").on("input", function () {
+                let value = $(this).val();
+
+                // Filter invalid characters
+                let validValue = value.replace(/[^a-zA-Z0-9@@._-]/g, "");
+                if (value !== validValue) {
+                    $(this).val(validValue);
+                    $("#emailError").text("Only letters, numbers, @@, ., _, and - are allowed.");
+                    return;
+                }
+
+                // Email pattern validation
+                const emailPattern = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+                if (validValue.length > 0 && !emailPattern.test(validValue)) {
+                    $("#emailError").text("Please enter a valid email address.");
+                } else {
+                    $("#emailError").text("");
+                }
+              });
+
+            $("#fullname").on("input", function () {
+                let value = $(this).val();
+                if (/[^a-zA-Z]/.test(value)) {
+                    $("#fullNameError").text("Only letters are allowed.");
+                } else {
+                    $("#fullNameError").text("");
+                }
+            });
+
+            $("#picture").on("change", function () {
+                const fileInput = $(this)[0];
+                const file = fileInput.files[0];
+
+                if (file) {
+                    const validExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
+                    const fileName = file.name.toLowerCase();
+                    const isValid = validExtensions.some(ext => fileName.endsWith(ext));
+
+                    if (!isValid) {
+                        $("#photoFileError").text("Only .jpg, .jpeg, .png, .gif, .webp files are allowed.");
+                        fileInput.value = "";
+                    } else {
+                        $("#photoFileError").text("");
+                    }
+                }
+            });
+
             $("#save_profile").click(function (event) {
                 event.preventDefault();
 
@@ -118,3 +175,4 @@
         });
     </script>
 }
+

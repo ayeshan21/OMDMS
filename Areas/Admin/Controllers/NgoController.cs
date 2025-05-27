@@ -50,9 +50,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                     }
                 };
 
-                return View(data); // Important: Pass model to view
-            
-
+                return View(data);         
         }
 
         [Route("RequestMedicine")]
@@ -246,7 +244,6 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                 _context.WithdrawRequests.Update(existingRequest);
             }
 
-            // Step 5: Save inventory changes
             _context.MedicineInventories.Update(inventoryItem);
             _context.SaveChanges();
 

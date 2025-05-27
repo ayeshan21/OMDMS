@@ -105,12 +105,12 @@
                                 }
                                 else
                                 {
-                                    <form action="/Admin/AcceptRequest" method="post" style="display:inline;">
+                                    <form action="/Admin/AcceptEmergencyRequest" method="post" style="display:inline;">
                                         <input type="hidden" name="EmergencyId" value="@item.emergencyRequest.Id" />
                                         <input type="submit" class="btn btn-sm btn-success" value="Accept" />
                                     </form>
 
-                                    <form action="/Admin/RejectRequest" method="post" style="display:inline;">
+                                    <form action="/Admin/RejectEmergencyRequest" method="post" style="display:inline;">
                                         <input type="hidden" name="EmergencyId" value="@item.emergencyRequest.Id" />
                                         <input type="submit" class="btn btn-sm btn-danger" value="Reject" />
                                     </form>

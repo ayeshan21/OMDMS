@@ -4,17 +4,27 @@
     ViewData["Title"] = "Edit User Profile";
 
 }
+<style>
+    .error-message {
+        color: red;
+        font-size: 15px;
+        margin-top: 2px;
+    }
+</style>
+
 <form asp-action="EditUser" asp-controller="User" method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="UserId" id="userId"/>
     <div class="p-4 bg-light">
         <div class="form-group">
             <label asp-for="FullName" class="control-label">Full Name <span style="color:red">*</span></label>
             <input asp-for="FullName" value="@Model.FullName" class="form-control" name="FullName" id="fullname"/>
+            <div id="fullNameError" class="error-message"></div>
             <span asp-validation-for="FullName" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="Email" class="control-label">Email <span style="color:red">*</span></label>
             <input asp-for="Email" value="@Model.Email" class="form-control" type="email" name="Email" id="email"/>
+            <div id="emailError" class="error-message"></div>
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
         <div class="form-group">
@@ -34,7 +44,7 @@
         </div>
         <div class="form-group">
             <label asp-for="Role" class="control-label">I am interested to be: <span style="color:red">*</span></label>
-            <select asp-for="Role" class="form-control" name="Role" id="role">
+            <select asp-for="Role" class="form-control" name="Role" id="role" style="color:black">
                 <option value="@Model.Role">@Model.Role</option>
                @if (Model.Role == "Donor")
                 {
@@ -50,6 +60,7 @@
         <div class="form-group">
             <label asp-for="ProfilePictureFile" class="control-label">Profile Picture <span style="color:red">*</span></label>
             <input asp-for="ProfilePictureFile" value="@Model.ProfilePictureFile" type="file" class="form-control-file" name="ProfilePictureFile" id="profilepicture"/>
+            <div id="photoFileError" class="error-message"></div>
             <span asp-validation-for="ProfilePictureFile" class="text-danger"></span>
             @if (!string.IsNullOrEmpty(Model.ProfilePictureUrl))
             {
@@ -66,3 +77,56 @@
         </div>
     </div>
 </form>
+
+@section Scripts{
+    <script>
+        $(document).ready(function() {
+             $("#email").on("input", function () {
+                let value = $(this).val();
+
+                // Filter invalid characters
+                let validValue = value.replace(/[^a-zA-Z0-9@@._-]/g, "");
+                if (value !== validValue) {
+                    $(this).val(validValue);
+                    $("#emailError").text("Only letters, numbers, @@, ., _, and - are allowed.");
+                    return;
+                }
+
+                // Email pattern validation
+                const emailPattern = /^[^\s@@]+@@[^\s@@]+\.[^\s@@]+$/;
+                if (validValue.length > 0 && !emailPattern.test(validValue)) {
+                    $("#emailError").text("Please enter a valid email address.");
+                } else {
+                    $("#emailError").text("");
+                }
+              });
+
+            $("#fullname").on("input", function () {
+                let value = $(this).val();
+                if (/[^a-zA-Z]/.test(value)) {
+                    $("#fullNameError").text("Only letters are allowed.");
+                } else {
+                    $("#fullNameError").text("");
+                }
+            });
+
+            $("#profilepicture").on("change", function () {
+                const fileInput = $(this)[0];
+                const file = fileInput.files[0];
+
+                if (file) {
+                    const validExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
+                    const fileName = file.name.toLowerCase();
+                    const isValid = validExtensions.some(ext => fileName.endsWith(ext));
+
+                    if (!isValid) {
+                        $("#photoFileError").text("Only .jpg, .jpeg, .png, .gif, .webp files are allowed.");
+                        fileInput.value = "";
+                    } else {
+                        $("#photoFileError").text("");
+                    }
+                }
+            });
+        });
+    </script>
+}

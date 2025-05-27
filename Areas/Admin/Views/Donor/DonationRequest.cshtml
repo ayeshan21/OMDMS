@@ -3,6 +3,13 @@
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
     ViewData["Title"] = "Donation Request Form";
 }
+<style>
+    .error-message {
+        color: red;
+        font-size: 15px;
+        margin-top: 2px;
+    }
+</style>
 <form id="medicineForm" method="post" enctype="multipart/form-data" asp-controller="Donor" asp-action="DonationRequest">
     <div class="p-4 bg-light">
         <div class="form-group">
@@ -18,11 +25,13 @@
         <div class="form-group">
             <label asp-for="Company" class="control-label">Pharmaceutical Company <span style="color:red">*</span></label>
             <input asp-for="donationRequest.Company" class="form-control" type="text" value="@Model.donationRequest.Company" name="Company" id="company" />
+            <div id="companyError" class="error-message"></div>
             <span asp-validation-for="Company" class="text-danger"></span>
         </div>
         <div class="form-group">
             <label asp-for="Type" class="control-label">Medicine Type <span style="color:red">*</span></label>
-            <select asp-for="donationRequest.Type" class="form-control" value="@Model.donationRequest.Type" name="Type" id="type">
+            <select asp-for="donationRequest.Type" class="form-control" value="@Model.donationRequest.Type" name="Type" id="type" style="color:black">
+                <option value="Select">-Select Type-</option>
                 <option value="Tablet">Tablet</option>
                 <option value="Capsule">Capsule</option>
                 <option value="Syrup">Syrup</option>
@@ -40,7 +49,8 @@
         </div>
         <div class="form-group">
             <label asp-for="Condition" class="control-label">Medicine Condition <span style="color:red">*</span></label>
-            <select asp-for="donationRequest.Condition" class="form-control" value="@Model.donationRequest.Condition" name="Condition" id="condition">
+            <select asp-for="donationRequest.Condition" class="form-control" value="@Model.donationRequest.Condition" name="Condition" id="condition" style="color:black">
+                <option value="Select">-Select Condition-</option>
                 <option value="Sealed">Sealed</option>
                 <option value="Opened">Opened</option>
             </select>
@@ -53,7 +63,7 @@
         </div>
         <div class="form-group">
             <label asp-for="SelectNgo" class="control-label">Select NGO <span style="color:red">*</span></label>
-            <select asp-for="donationRequest.SelectNgo" class="form-control" value="@Model.donationRequest.SelectNgo" name="SelectNgo" id="selectNgo">
+            <select asp-for="donationRequest.SelectNgo" class="form-control" value="@Model.donationRequest.SelectNgo" name="SelectNgo" id="selectNgo" style="color:black">
                 <option value="">-- Select NGO --</option>
                 @foreach (var item in Model.NgoList)
                 {
@@ -65,6 +75,7 @@
         <div class="form-group">
             <label asp-for="PhotoFile" class="control-label">Medicine Photo <span style="color:red">*</span></label>
             <input type="file" asp-for="PhotoFile" class="form-control-file" value="@Model.PhotoFile" id="medicinePhoto" name="PhotoFile" />
+            <div id="photoFileError" class="error-message"></div>
             <span asp-validation-for="PhotoFile" class="text-danger"></span>
         </div>
         <div class="form-group d-flex justify-content-between">
@@ -80,8 +91,36 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         $(document).ready(function () {
+
+            $("#company").on("input", function () {
+                let value = $(this).val();
+                if (/[^a-zA-Z]/.test(value)) {
+                    $("#companyError").text("Only letters are allowed.");
+                } else {
+                    $("#companyError").text("");
+                }
+            });
+            $("#medicinePhoto").on("change", function () {
+                const fileInput = $(this)[0];
+                const file = fileInput.files[0];
+
+                if (file) {
+                    const validExtensions = [".jpg", ".jpeg", ".png", ".gif", ".webp"];
+                    const fileName = file.name.toLowerCase();
+                    const isValid = validExtensions.some(ext => fileName.endsWith(ext));
+
+                    if (!isValid) {
+                        $("#photoFileError").text("Only .jpg, .jpeg, .png, .gif, .webp files are allowed.");
+                        fileInput.value = "";
+                    } else {
+                        $("#photoFileError").text("");
+                    }
+                }
+            });
+
             $("#donateRequest").click(function (event) {
                 event.preventDefault();
+ 
 
                 var formdata = new FormData();
                 formdata.append("donationRequest.Name", $("#medName").val());
