@@ -12,6 +12,7 @@ using System.Net.Mail;
 using System.Net;
 using Online_Medicine_Donation.DataModel.Online_Medicine_Donation.Models;
 using static iTextSharp.text.pdf.AcroFields;
+using System.Security.Claims;
 
 namespace Online_Medicine_Donation.Areas.Admin.Controllers
 {
@@ -118,21 +119,22 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                 }
             }).ToList();
 
-            var emergencyrequest = _context.EmergencyRequests.Select(m => new RequestVM
-            {
-                emergencyRequest = new EmergencyRequest
-                {
-                    Id = m.Id,
-                    EmergencyId = m.EmergencyId, // Use existing ID
-                    NgoName = m.NgoName,
-                    MedicineName = m.MedicineName,
-                    Quantity = m.Quantity,
-                    Type = m.Type,
-                    Reason = m.Reason,
-                    Days = m.Days,
-                    Status = m.Status
-                }
-            }).ToList();
+              
+              var emergencyrequest = _context.EmergencyRequests.Select(m => new RequestVM
+              {
+                  emergencyRequest = new EmergencyRequest
+                  {
+                      Id = m.Id,
+                      EmergencyId = m.EmergencyId, // Use existing ID
+                      NgoName = m.NgoName,
+                      MedicineName = m.MedicineName,
+                      Quantity = m.Quantity,
+                      Type = m.Type,
+                      Reason = m.Reason,
+                      Days = m.Days,
+                      Status = m.Status
+                  }
+              }).ToList();
 
             var viewModel = new CombinedRequestVM
             {

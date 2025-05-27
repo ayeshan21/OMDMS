@@ -34,7 +34,25 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
         [Route("EmergencyRequest")]
         public IActionResult EmergencyRequest()
         {
-            return View();
+           
+                var user = _context.UserProfiles.FirstOrDefault(x => x.UserId == currUserGuid);
+
+                if (user == null)
+                {
+                    return NotFound("User not found.");
+                }
+
+                var data = new RequestVM()
+                {
+                    emergencyRequest = new EmergencyRequest()
+                    {
+                        NgoName = user.FullName
+                    }
+                };
+
+                return View(data); // Important: Pass model to view
+            
+
         }
 
         [Route("RequestMedicine")]
@@ -49,6 +67,7 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             {
                 var data = new EmergencyRequest()
                 {
+
                     EmergencyId = currUserGuid,
                     NgoName = model.emergencyRequest.NgoName,
                     MedicineName = model.emergencyRequest.MedicineName,
