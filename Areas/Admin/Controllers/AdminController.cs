@@ -43,13 +43,18 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
             // Donation status stats for pie chart
             ViewBag.DonationStatusStats = new
             {
-                 Pending = _context.DonationRequests.Count(x => x.Status == "Null"),
+                 Pending = _context.DonationRequests.Count(x => x.Status == null),
                  Completed = _context.DonationRequests.Count(x => x.Status == "Accepted"),
                  Rejected = _context.DonationRequests.Count(x => x.Status == "Rejected")  
             };
 
-        
-           
+            ViewBag.EmergencyStatusStats = new
+            {
+                 Pending = _context.EmergencyRequests.Count(x => x.Status == null),
+                 Completed = _context.EmergencyRequests.Count(x => x.Status == "Accepted"),
+                 Rejected = _context.EmergencyRequests.Count(x => x.Status == "Rejected")
+            };
+
             var currentYear = DateTime.Now.Year;
 
             // Actual user growth data

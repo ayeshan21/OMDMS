@@ -76,8 +76,8 @@
 
             $("#reason").on("input", function () {
                 let value = $(this).val();
-                if (/[^a-zA-Z]/.test(value)) {
-                    $("#reasonError").text("Only letters are allowed.");
+                if (/[^a-zA-Z\s]/.test(value)) {
+                    $("#reasonError").text("Only letters and white space are allowed.");
                 } else {
                     $("#reasonError").text("");
                 }

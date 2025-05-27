@@ -52,12 +52,14 @@
 </div>
 
 <div class="row mb-4">
-    <!-- Charts Row -->
+    <!-- First Row of Charts -->
     <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
                 <h4 class="card-title">Donation Request Status</h4>
-                <canvas id="statusPieChart" height="250"></canvas>
+                <div class="chart-container" style="position: relative; height:300px;">
+                    <canvas id="statusPieChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
@@ -65,92 +67,171 @@
     <div class="col-md-6 grid-margin stretch-card">
         <div class="card">
             <div class="card-body">
+                <h4 class="card-title">Emergency Request Status</h4>
+                <div class="chart-container" style="position: relative; height:300px;">
+                    <canvas id="emergencyStatusPieChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row mb-4">
+    <div class="col-md-8 offset-md-2 grid-margin stretch-card">
+        <div class="card">
+            <div class="card-body">
                 <h4 class="card-title">User Growth</h4>
-                <canvas id="userGrowthChart" height="250"></canvas>
+                <div class="chart-container" style="position: relative; height:350px;">
+                    <canvas id="userGrowthChart"></canvas>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-
-
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
+        // Function to safely get data or return default zeros
+        function getSafeData(data, defaultValue = [0, 0, 0]) {
+            return data && data.length > 0 ? data : defaultValue;
+        }
+
         // Status Pie Chart for donation
-        var statusCtx = document.getElementById('statusPieChart').getContext('2d');
-        var statusPieChart = new Chart(statusCtx, {
-            type: 'pie',
-            data: {
-                labels: ['Pending', 'Completed', 'Rejected'],
-                datasets: [{
-                    data: [
-        @ViewBag.DonationStatusStats.Pending,
-        @ViewBag.DonationStatusStats.Completed,
-        @ViewBag.DonationStatusStats.Rejected
-                            ],
-                    backgroundColor: [
-                        'rgba(255, 206, 86, 0.7)',
-                        'rgba(75, 192, 192, 0.7)',
-                        'rgba(255, 99, 132, 0.7)'
-                    ],
-                    borderWidth: 1
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function (context) {
-                                let label = context.label || '';
-                                let value = context.raw || 0;
-                                let total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                let percentage = Math.round((value / total) * 100);
-                                return `${label}: ${value} (${percentage}%)`;
+        document.addEventListener('DOMContentLoaded', function() {
+            var statusCtx = document.getElementById('statusPieChart').getContext('2d');
+            var statusPieChart = new Chart(statusCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Pending', 'Completed', 'Rejected'],
+                    datasets: [{
+                        data: [
+                            @(ViewBag.DonationStatusStats?.Pending ?? 0),
+                            @(ViewBag.DonationStatusStats?.Completed ?? 0),
+                            @(ViewBag.DonationStatusStats?.Rejected ?? 0)
+                        ],
+                        backgroundColor: [
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(255, 99, 132, 0.7)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.label || '';
+                                    let value = context.raw || 0;
+                                    let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    let percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                                    return `${label}: ${value} (${percentage}%)`;
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
 
-        // User Growth Chart
-        var userGrowthCtx = document.getElementById('userGrowthChart').getContext('2d');
-        var userGrowthChart = new Chart(userGrowthCtx, {
-            type: 'line',
-            data: {
-                labels: @Json.Serialize(ViewBag.UserGrowthData.Labels),
-                datasets: [
-                    {
-                        label: 'NGOs',
-                        data: @Json.Serialize(ViewBag.UserGrowthData.NGOs),
-                        borderColor: 'rgba(255, 99, 132, 1)',
-                        backgroundColor: 'rgba(255, 99, 132, 0.1)',
-                        borderWidth: 2,
-                        tension: 0.1
-                    },
-                    {
-                        label: 'Donors',
-                        data: @Json.Serialize(ViewBag.UserGrowthData.Donors),
-                        borderColor: 'rgba(54, 162, 235, 1)',
-                        backgroundColor: 'rgba(54, 162, 235, 0.1)',
-                        borderWidth: 2,
-                        tension: 0.1
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: {
-                        beginAtZero: true
+            // Emergency Request Status Pie Chart
+            var emergencyStatusCtx = document.getElementById('emergencyStatusPieChart').getContext('2d');
+            var emergencyStatusPieChart = new Chart(emergencyStatusCtx, {
+                type: 'pie',
+                data: {
+                    labels: ['Pending', 'Completed', 'Rejected'],
+                    datasets: [{
+                        data: [
+                            @(ViewBag.EmergencyStatusStats?.Pending ?? 0),
+                            @(ViewBag.EmergencyStatusStats?.Completed ?? 0),
+                            @(ViewBag.EmergencyStatusStats?.Rejected ?? 0)
+                        ],
+                        backgroundColor: [
+                            'rgba(255, 159, 64, 0.7)',
+                            'rgba(153, 102, 255, 0.7)',
+                            'rgba(54, 162, 235, 0.7)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    let label = context.label || '';
+                                    let value = context.raw || 0;
+                                    let total = context.dataset.data.reduce((a, b) => a + b, 0);
+                                    let percentage = total > 0 ? Math.round((value / total) * 100) : 0;
+                                    return `${label}: ${value} (${percentage}%)`;
+                                }
+                            }
+                        }
                     }
                 }
-            }
+            });
+
+            // User Growth Chart
+            var userGrowthCtx = document.getElementById('userGrowthChart').getContext('2d');
+            var userGrowthChart = new Chart(userGrowthCtx, {
+                type: 'line',
+                data: {
+                    labels: @Json.Serialize(ViewBag.UserGrowthData?.Labels ?? new List<string>()),
+                    datasets: [
+                        {
+                            label: 'NGOs',
+                            data: @Json.Serialize(ViewBag.UserGrowthData?.NGOs ?? new List<int>()),
+                            borderColor: 'rgba(255, 99, 132, 1)',
+                            backgroundColor: 'rgba(255, 99, 132, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.1,
+                            fill: true
+                        },
+                        {
+                            label: 'Donors',
+                            data: @Json.Serialize(ViewBag.UserGrowthData?.Donors ?? new List<int>()),
+                            borderColor: 'rgba(54, 162, 235, 1)',
+                            backgroundColor: 'rgba(54, 162, 235, 0.1)',
+                            borderWidth: 2,
+                            tension: 0.1,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
+                            }
+                        }
+                    },
+                    plugins: {
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false
+                        }
+                    },
+                    interaction: {
+                        mode: 'nearest',
+                        axis: 'x',
+                        intersect: false
+                    }
+                }
+            });
         });
     </script>
 }

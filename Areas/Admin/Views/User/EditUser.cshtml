@@ -103,8 +103,8 @@
 
             $("#fullname").on("input", function () {
                 let value = $(this).val();
-                if (/[^a-zA-Z]/.test(value)) {
-                    $("#fullNameError").text("Only letters are allowed.");
+                if (/[^a-zA-Z\s]/.test(value)) {
+                    $("#fullNameError").text("Only letters and white space are allowed.");
                 } else {
                     $("#fullNameError").text("");
                 }

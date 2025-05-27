@@ -21,7 +21,7 @@
 
         <div class="form-group">
             <label asp-for="Email" class="control-label">Email <span style="color:red">*</span></label>
-            <input asp-for="Email" class="form-control" type="email" id="email" />
+            <input asp-for="Email" class="form-control" type="email" id="email"/>
             <div id="emailError" class="error-message"></div>
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
@@ -95,16 +95,18 @@
                 }
               });
 
-            $("#fullname").on("input", function () {
-                let value = $(this).val();
-                if (/[^a-zA-Z]/.test(value)) {
-                    $("#fullNameError").text("Only letters are allowed.");
-                } else {
-                    $("#fullNameError").text("");
-                }
-            });
+             $("#fullname").on("input", function () {
+            let value = $(this).val();
+            // This regex allows only letters (uppercase/lowercase) and spaces
+            if (/[^a-zA-Z\s]/.test(value)) {
+                $("#fullNameError").text("Only letters and white spaces are allowed.");
+            } else {
+                $("#fullNameError").text("");
+            }
+           });
 
-            $("#picture").on("change", function () {
+
+                    $("#picture").on("change", function () {
                 const fileInput = $(this)[0];
                 const file = fileInput.files[0];
 

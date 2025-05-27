@@ -34,16 +34,16 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
         [Route("UserProfileindex")]
         public IActionResult UserProfileindex()
         {
-
+            
             var user = _context.UserProfiles.FirstOrDefault(x => x.UserId == currUserGuid);
-    
-            if(user == null)
+
+            if (user == null)
             {
                 return View();
             }
             else
             {
-              
+               
                 return RedirectToAction("UserProfile", user);
 
             }
