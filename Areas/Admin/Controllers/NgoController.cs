@@ -94,7 +94,6 @@ namespace Online_Medicine_Donation.Areas.Admin.Controllers
                 emergencyRequest = new EmergencyRequest
                 {
                     EmergencyId = m.EmergencyId, // Use existing ID
-                    NgoName = m.NgoName,
                     MedicineName = m.MedicineName,
                     Quantity = m.Quantity,
                     Type = m.Type,
