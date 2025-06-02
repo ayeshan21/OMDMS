@@ -28,7 +28,7 @@
 
         <div class="form-group">
             <label asp-for="PhoneNumber" class="control-label">Phone Number <span style="color:red">*</span></label>
-            <input asp-for="PhoneNumber" class="form-control" type="tel" id="phone" />
+            <input asp-for="PhoneNumber" class="form-control" type="tel" maxlength="11" id="phone" />
             <span asp-validation-for="PhoneNumber" class="text-danger"></span>
         </div>
 

@@ -60,28 +60,12 @@
                                 <td>@item.PhoneNumber</td>
                                 <td>@item.DonationTime</td>
                                 <td>
-                                    @if (string.IsNullOrWhiteSpace(item.Status))
-                                    {
-                                        <span class="btn btn-sm disabled bg-secondary text-white">Pending</span>
-                                      
-                                    }
-                                    else if (item.Status == "Accepted")
-                                    {
-                                        <span class="btn btn-sm disabled bg-success text-white">Accepted</span>
-                                      
-                                    }
-                                    else
-                                    {
-                                        if (item.Status == "Rejected")
-                                        {
-                                            <span class="btn btn-sm disabled bg-danger text-white">Rejected</span>
-                                        }
-                                    }
-                                </td>
+                                   
+                                    <span class="btn btn-sm disabled bg-success text-white">@item.Status</span>
+
+                                </td> 
                                
                             </tr>
-
-
                         }
 
                     }
